@@ -7,6 +7,6 @@
 .\blynk.o: PLL.h
 .\blynk.o: Timers.h
 .\blynk.o: UART.h
-.\blynk.o: PortF.h
+.\blynk.o: Ports.h
 .\blynk.o: esp8266.h
 .\blynk.o: Blynk.h

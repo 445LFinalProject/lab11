@@ -52,7 +52,7 @@ Section Cross References
     blynk.o(i.Blynk_to_TM4C) refers to strtok.o(.text) for strtok
     blynk.o(i.Blynk_to_TM4C) refers to strcpy.o(.text) for strcpy
     blynk.o(i.Blynk_to_TM4C) refers to atoi.o(.text) for atoi
-    blynk.o(i.Blynk_to_TM4C) refers to portf.o(i.PortF_Output) for PortF_Output
+    blynk.o(i.Blynk_to_TM4C) refers to ports.o(i.PortF_Output) for PortF_Output
     blynk.o(i.Blynk_to_TM4C) refers to st7735.o(i.Output_Color) for Output_Color
     blynk.o(i.Blynk_to_TM4C) refers to st7735.o(i.ST7735_OutString) for ST7735_OutString
     blynk.o(i.Blynk_to_TM4C) refers to st7735.o(i.ST7735_OutUDec) for ST7735_OutUDec
@@ -60,7 +60,7 @@ Section Cross References
     blynk.o(i.Blynk_to_TM4C) refers to uart.o(i.UART_OutString) for UART_OutString
     blynk.o(i.Blynk_to_TM4C) refers to blynk.o(.bss) for serial_buf
     blynk.o(i.Blynk_to_TM4C) refers to blynk.o(.data) for Pin_Number
-    blynk.o(i.SendInformation) refers to portf.o(i.PortF_Input) for PortF_Input
+    blynk.o(i.SendInformation) refers to ports.o(i.PortF_Input) for PortF_Input
     blynk.o(i.SendInformation) refers to blynk.o(i.TM4C_to_Blynk) for TM4C_to_Blynk
     blynk.o(i.SendInformation) refers to st7735.o(i.Output_Color) for Output_Color
     blynk.o(i.SendInformation) refers to st7735.o(i.ST7735_OutString) for ST7735_OutString
@@ -72,8 +72,8 @@ Section Cross References
     blynk.o(i.TM4C_to_Blynk) refers to esp8266.o(i.ESP8266_OutString) for ESP8266_OutString
     blynk.o(i.main1) refers to pll.o(i.PLL_Init) for PLL_Init
     blynk.o(i.main1) refers to startup.o(.text) for DisableInterrupts
-    blynk.o(i.main1) refers to portf.o(i.PortF_Init) for PortF_Init
-    blynk.o(i.main1) refers to portf.o(i.PortF_Input) for PortF_Input
+    blynk.o(i.main1) refers to ports.o(i.PortF_Init) for PortF_Init
+    blynk.o(i.main1) refers to ports.o(i.PortF_Input) for PortF_Input
     blynk.o(i.main1) refers to st7735.o(i.Output_Init) for Output_Init
     blynk.o(i.main1) refers to st7735.o(i.ST7735_OutString) for ST7735_OutString
     blynk.o(i.main1) refers to uart.o(i.UART_Init) for UART_Init
@@ -242,8 +242,8 @@ Section Cross References
     systick.o(i.SysTick_Wait10ms) refers to systick.o(i.SysTick_Wait) for SysTick_Wait
     main.o(i.main) refers to pll.o(i.PLL_Init) for PLL_Init
     main.o(i.main) refers to startup.o(.text) for DisableInterrupts
-    main.o(i.main) refers to portf.o(i.PortF_Init) for PortF_Init
-    main.o(i.main) refers to portf.o(i.PortF_Input) for PortF_Input
+    main.o(i.main) refers to ports.o(i.PortF_Init) for PortF_Init
+    main.o(i.main) refers to ports.o(i.PortF_Input) for PortF_Input
     main.o(i.main) refers to st7735.o(i.Output_Init) for Output_Init
     main.o(i.main) refers to st7735.o(i.ST7735_OutString) for ST7735_OutString
     main.o(i.main) refers to uart.o(i.UART_Init) for UART_Init
@@ -410,7 +410,7 @@ Image Symbol Table
     Blynk.c                                  0x00000000   Number         0  blynk.o ABSOLUTE
     DAC.c                                    0x00000000   Number         0  dac.o ABSOLUTE
     PLL.c                                    0x00000000   Number         0  pll.o ABSOLUTE
-    PortF.c                                  0x00000000   Number         0  portf.o ABSOLUTE
+    Ports.c                                  0x00000000   Number         0  ports.o ABSOLUTE
     ST7735.c                                 0x00000000   Number         0  st7735.o ABSOLUTE
     SysTick.c                                0x00000000   Number         0  systick.o ABSOLUTE
     Timers.c                                 0x00000000   Number         0  timers.o ABSOLUTE
@@ -454,9 +454,9 @@ Image Symbol Table
     i.Output_Color                           0x00000a58   Section        0  st7735.o(i.Output_Color)
     i.Output_Init                            0x00000a64   Section        0  st7735.o(i.Output_Init)
     i.PLL_Init                               0x00000a74   Section        0  pll.o(i.PLL_Init)
-    i.PortF_Init                             0x00000af0   Section        0  portf.o(i.PortF_Init)
-    i.PortF_Input                            0x00000b4c   Section        0  portf.o(i.PortF_Input)
-    i.PortF_Output                           0x00000b5c   Section        0  portf.o(i.PortF_Output)
+    i.PortF_Init                             0x00000af0   Section        0  ports.o(i.PortF_Init)
+    i.PortF_Input                            0x00000b4c   Section        0  ports.o(i.PortF_Input)
+    i.PortF_Output                           0x00000b5c   Section        0  ports.o(i.PortF_Output)
     i.Rx5Fifo_Init                           0x00000b68   Section        0  esp8266.o(i.Rx5Fifo_Init)
     i.Rx5Fifo_Put                            0x00000b94   Section        0  esp8266.o(i.Rx5Fifo_Put)
     i.Rx5Fifo_Size                           0x00000c64   Section        0  esp8266.o(i.Rx5Fifo_Size)
@@ -736,9 +736,9 @@ Image Symbol Table
     Output_Color                             0x00000a59   Thumb Code    12  st7735.o(i.Output_Color)
     Output_Init                              0x00000a65   Thumb Code    16  st7735.o(i.Output_Init)
     PLL_Init                                 0x00000a75   Thumb Code   118  pll.o(i.PLL_Init)
-    PortF_Init                               0x00000af1   Thumb Code    74  portf.o(i.PortF_Init)
-    PortF_Input                              0x00000b4d   Thumb Code    10  portf.o(i.PortF_Input)
-    PortF_Output                             0x00000b5d   Thumb Code     6  portf.o(i.PortF_Output)
+    PortF_Init                               0x00000af1   Thumb Code    74  ports.o(i.PortF_Init)
+    PortF_Input                              0x00000b4d   Thumb Code    10  ports.o(i.PortF_Input)
+    PortF_Output                             0x00000b5d   Thumb Code     6  ports.o(i.PortF_Output)
     Rx5Fifo_Init                             0x00000b69   Thumb Code    30  esp8266.o(i.Rx5Fifo_Init)
     Rx5Fifo_Put                              0x00000b95   Thumb Code   192  esp8266.o(i.Rx5Fifo_Put)
     Rx5Fifo_Size                             0x00000c65   Thumb Code    12  esp8266.o(i.Rx5Fifo_Size)
@@ -880,9 +880,9 @@ Memory Map of the image
     0x00000a58   0x0000000c   Code   RO          228    i.Output_Color      st7735.o
     0x00000a64   0x00000010   Code   RO          229    i.Output_Init       st7735.o
     0x00000a74   0x0000007c   Code   RO           12    i.PLL_Init          pll.o
-    0x00000af0   0x0000005c   Code   RO          644    i.PortF_Init        portf.o
-    0x00000b4c   0x00000010   Code   RO          645    i.PortF_Input       portf.o
-    0x00000b5c   0x0000000c   Code   RO          646    i.PortF_Output      portf.o
+    0x00000af0   0x0000005c   Code   RO          773    i.PortF_Init        ports.o
+    0x00000b4c   0x00000010   Code   RO          774    i.PortF_Input       ports.o
+    0x00000b5c   0x0000000c   Code   RO          775    i.PortF_Output      ports.o
     0x00000b68   0x0000002c   Code   RO          525    i.Rx5Fifo_Init      esp8266.o
     0x00000b94   0x000000d0   Code   RO          526    i.Rx5Fifo_Put       esp8266.o
     0x00000c64   0x00000014   Code   RO          527    i.Rx5Fifo_Size      esp8266.o
@@ -902,15 +902,15 @@ Memory Map of the image
     0x00001150   0x00000020   Code   RO          258    i.ST7735_SetCursor  st7735.o
     0x00001170   0x0000000c   Code   RO          260    i.ST7735_SetTextColor  st7735.o
     0x0000117c   0x0000004c   Code   RO          172    i.SendInformation   blynk.o
-    0x000011c8   0x00000048   Code   RO          764    i.Stepper_CW        stepper.o
-    0x00001210   0x00000070   Code   RO          765    i.Stepper_Init      stepper.o
-    0x00001280   0x00000018   Code   RO          692    i.SysTick_Init      systick.o
-    0x00001298   0x00000020   Code   RO          693    i.SysTick_Wait      systick.o
+    0x000011c8   0x00000048   Code   RO          740    i.Stepper_CW        stepper.o
+    0x00001210   0x00000070   Code   RO          741    i.Stepper_Init      stepper.o
+    0x00001280   0x00000018   Code   RO          668    i.SysTick_Init      systick.o
+    0x00001298   0x00000020   Code   RO          669    i.SysTick_Wait      systick.o
     0x000012b8   0x0000003c   Code   RO          173    i.TM4C_to_Blynk     blynk.o
-    0x000012f4   0x00000018   Code   RO          730    i.Timer2A_Handler   timers.o
-    0x0000130c   0x00000060   Code   RO          731    i.Timer2_Init       timers.o
-    0x0000136c   0x00000018   Code   RO          732    i.Timer3A_Handler   timers.o
-    0x00001384   0x00000060   Code   RO          733    i.Timer3_Init       timers.o
+    0x000012f4   0x00000018   Code   RO          706    i.Timer2A_Handler   timers.o
+    0x0000130c   0x00000060   Code   RO          707    i.Timer2_Init       timers.o
+    0x0000136c   0x00000018   Code   RO          708    i.Timer3A_Handler   timers.o
+    0x00001384   0x00000060   Code   RO          709    i.Timer3_Init       timers.o
     0x000013e4   0x00000038   Code   RO          528    i.Tx5Fifo_Get       esp8266.o
     0x0000141c   0x00000024   Code   RO          529    i.Tx5Fifo_Init      esp8266.o
     0x00001440   0x0000003c   Code   RO          530    i.Tx5Fifo_Put       esp8266.o
@@ -937,7 +937,7 @@ Memory Map of the image
     0x00001a5c   0x0000002c   Code   RO          535    i.copySoftwareToHardware5  esp8266.o
     0x00001a88   0x0000001c   Code   RO          264    i.deselect          st7735.o
     0x00001aa4   0x00000048   Code   RO          267    i.fillmessage       st7735.o
-    0x00001aec   0x000000f0   Code   RO          716    i.main              main.o
+    0x00001aec   0x000000f0   Code   RO          692    i.main              main.o
     0x00001bdc   0x00000012   Code   RO          269    i.pushColor         st7735.o
     0x00001bee   0x00000002   PAD
     0x00001bf0   0x00000074   Code   RO          270    i.setAddrWindow     st7735.o
@@ -945,7 +945,7 @@ Memory Map of the image
     0x00001c9c   0x00000020   Code   RO          272    i.writedata         st7735.o
     0x00001cbc   0x00000842   Data   RO          274    .constdata          st7735.o
     0x000024fe   0x00000002   PAD
-    0x00002500   0x00000030   Data   RO          767    .constdata          stepper.o
+    0x00002500   0x00000030   Data   RO          743    .constdata          stepper.o
     0x00002530   0x00000081   Data   RO          836    .constdata          mc_w.l(ctype_o.o)
     0x000025b1   0x00000003   PAD
     0x000025b4   0x00000004   Data   RO          837    .constdata          mc_w.l(ctype_o.o)
@@ -960,9 +960,9 @@ Memory Map of the image
     0x20000010   0x00000024   Data   RW          176    .data               blynk.o
     0x20000034   0x0000002c   Data   RW          275    .data               st7735.o
     0x20000060   0x00000094   Data   RW          537    .data               esp8266.o
-    0x200000f4   0x00000008   Data   RW          717    .data               main.o
-    0x200000fc   0x00000008   Data   RW          734    .data               timers.o
-    0x20000104   0x00000008   Data   RW          768    .data               stepper.o
+    0x200000f4   0x00000008   Data   RW          693    .data               main.o
+    0x200000fc   0x00000008   Data   RW          710    .data               timers.o
+    0x20000104   0x00000008   Data   RW          744    .data               stepper.o
     0x2000010c   0x00000004   Data   RW          803    .data               mc_w.l(strtok.o)
     0x20000110   0x00000004   Data   RW          827    .data               mc_w.l(errno.o)
 
@@ -989,7 +989,7 @@ Image component sizes
       1982        618          0        148        832       9868   esp8266.o
        240         84          0          8          0        583   main.o
        124          6          0          0          0       4631   pll.o
-       120         30          0          0          0       1382   portf.o
+       120         30          0          0          0       1382   ports.o
       2022        234       2114         44         12      13867   st7735.o
        672        622          0          0       1024        860   startup.o
        184         38         48          8          0       1449   stepper.o

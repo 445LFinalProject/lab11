@@ -7,7 +7,7 @@
 .\main.o: PLL.h
 .\main.o: Timers.h
 .\main.o: UART.h
-.\main.o: PortF.h
+.\main.o: Ports.h
 .\main.o: esp8266.h
 .\main.o: Blynk.h
 .\main.o: stepper.h
