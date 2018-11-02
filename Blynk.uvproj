@@ -431,16 +431,6 @@
               <FilePath>.\ST7735.c</FilePath>
             </File>
             <File>
-              <FileName>Timer2.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Timer2.c</FilePath>
-            </File>
-            <File>
-              <FileName>Timer3.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Timer3.c</FilePath>
-            </File>
-            <File>
               <FileName>esp8266.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\esp8266.c</FilePath>
@@ -464,6 +454,16 @@
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\main.c</FilePath>
+            </File>
+            <File>
+              <FileName>Timers.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Timers.c</FilePath>
+            </File>
+            <File>
+              <FileName>stepper.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\stepper.c</FilePath>
             </File>
           </Files>
         </Group>

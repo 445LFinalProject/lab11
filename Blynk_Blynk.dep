@@ -42,7 +42,7 @@ I (tm4c123gh6pm.h)(0x5B8F35B8)
 F (.\SysTick.c)(0x5BB96CD4)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\systick.o --omf_browse .\systick.crf --depend .\systick.d)
 I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C87C24)
 I (tm4c123gh6pm.h)(0x5B8F35B8)
-F (.\main.c)(0x5BDC8A72)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+F (.\main.c)(0x5BDC91B7)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\main.o --omf_browse .\main.crf --depend .\main.d)
 I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C87C24)
 I (C:\Program Files\ARM\ARMCC\include\string.h)(0x51C87C24)
 I (C:\Program Files\ARM\ARMCC\include\stdlib.h)(0x51C87C24)
@@ -54,6 +54,11 @@ I (UART.h)(0x5BD9211B)
 I (PortF.h)(0x5BD9211A)
 I (esp8266.h)(0x5BD92119)
 I (Blynk.h)(0x5BD93E56)
+I (stepper.h)(0x5B8F386A)
 F (.\Timers.c)(0x5BDC89BD)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\timers.o --omf_browse .\timers.crf --depend .\timers.d)
 I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C87C24)
 I (tm4c123gh6pm.h)(0x5B8F35B8)
+F (.\stepper.c)(0x5BDC9238)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\stepper.o --omf_browse .\stepper.crf --depend .\stepper.d)
+I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C87C24)
+I (tm4c123gh6pm.h)(0x5B8F35B8)
+I (systick.h)(0x5BB96CD4)

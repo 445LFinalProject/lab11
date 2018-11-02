@@ -10,3 +10,4 @@
 .\main.o: PortF.h
 .\main.o: esp8266.h
 .\main.o: Blynk.h
+.\main.o: stepper.h
