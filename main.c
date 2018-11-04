@@ -44,7 +44,7 @@ int main(void){
   }*/
 	
 	/*stepper motor code calls*/
-	Stepper_Init();
+	/*Stepper_Init();
   Stepper_CW(speed);   // Pos=1; GPIO_PORTD_DATA_R=9
   Stepper_CW(speed);   // Pos=2; GPIO_PORTD_DATA_R=5
   Stepper_CW(speed);   // Pos=3; GPIO_PORTD_DATA_R=6
@@ -55,6 +55,5 @@ int main(void){
   Stepper_CW(speed);   // Pos=8; GPIO_PORTD_DATA_R=10
   while(1){
     Stepper_CW(10*speed);   // output every 10ms
-  }
-	
+  }*/	
 }
