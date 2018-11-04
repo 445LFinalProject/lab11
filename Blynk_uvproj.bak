@@ -436,11 +436,6 @@
               <FilePath>.\esp8266.c</FilePath>
             </File>
             <File>
-              <FileName>PortF.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\PortF.c</FilePath>
-            </File>
-            <File>
               <FileName>DAC.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\DAC.c</FilePath>
@@ -464,6 +459,11 @@
               <FileName>stepper.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\stepper.c</FilePath>
+            </File>
+            <File>
+              <FileName>Ports.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Ports.c</FilePath>
             </File>
           </Files>
         </Group>

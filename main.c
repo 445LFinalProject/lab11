@@ -10,6 +10,7 @@
 #include "esp8266.h"
 #include "Blynk.h"
 #include "stepper.h"
+#include "Limit_Sensor.h"
 
 void EnableInterrupts(void);    // Defined in startup.s
 void DisableInterrupts(void);   // Defined in startup.s

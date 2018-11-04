@@ -57,7 +57,7 @@ void SysTick_Wait(uint32_t delay){
   while(elapsedTime <= delay);
 }
 // Time delay using busy wait.
-// This assumes 50 MHz system clock.
+// This assumes 80 MHz system clock.
 void SysTick_Wait10ms(uint32_t delay){
   uint32_t i;
   for(i=0; i<delay; i++){

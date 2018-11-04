@@ -11,3 +11,4 @@
 .\main.o: esp8266.h
 .\main.o: Blynk.h
 .\main.o: stepper.h
+.\main.o: Limit_Sensor.h

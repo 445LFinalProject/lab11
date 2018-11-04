@@ -35,10 +35,10 @@ I (esp8266.h)(0x5BD91309)
 F (.\DAC.c)(0x5BBE17F7)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\dac.o --omf_browse .\dac.crf --depend .\dac.d)
 I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C86E14)
 I (tm4c123gh6pm.h)(0x5B8F27A8)
-F (.\SysTick.c)(0x5BB95EC4)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\systick.o --omf_browse .\systick.crf --depend .\systick.d)
+F (.\SysTick.c)(0x5BDF570E)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\systick.o --omf_browse .\systick.crf --depend .\systick.d)
 I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C86E14)
 I (tm4c123gh6pm.h)(0x5B8F27A8)
-F (.\main.c)(0x5BDF3EBC)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\main.o --omf_browse .\main.crf --depend .\main.d)
+F (.\main.c)(0x5BDF4216)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\main.o --omf_browse .\main.crf --depend .\main.d)
 I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C86E14)
 I (C:\Program Files\ARM\ARMCC\include\string.h)(0x51C86E14)
 I (C:\Program Files\ARM\ARMCC\include\stdlib.h)(0x51C86E14)
@@ -51,10 +51,16 @@ I (Ports.h)(0x5BD9130A)
 I (esp8266.h)(0x5BD91309)
 I (Blynk.h)(0x5BDF3E69)
 I (stepper.h)(0x5B8F2A5A)
-F (.\Timers.c)(0x5BDC7BAD)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\timers.o --omf_browse .\timers.crf --depend .\timers.d)
+I (Limit_Sensor.h)(0x5BDF5ABA)
+F (.\Timers.c)(0x5BDF55E9)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\timers.o --omf_browse .\timers.crf --depend .\timers.d)
 I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C86E14)
 I (tm4c123gh6pm.h)(0x5B8F27A8)
 F (.\stepper.c)(0x5BDC8428)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\stepper.o --omf_browse .\stepper.crf --depend .\stepper.d)
 I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C86E14)
 I (tm4c123gh6pm.h)(0x5B8F27A8)
 I (systick.h)(0x5BB95EC4)
+F (.\Limit_Sensor.c)(0x5BDF5AA6)(-c --cpu Cortex-M4 -D__EVAL -D__MICROLIB -g -O0 --apcs=interwork --split_sections --signed_chars -I.. -I..\..\.. --C99-I "C:\Program Files\ARM\RV31\INC"-I "C:\Program Files\ARM\CMSIS\Include"-I "C:\Program Files\ARM\Inc\TI\TM4C123"-Drvmdk -DPART_LM4F120H5QR -DTM4C123GH6PM-o .\limit_sensor.o --omf_browse .\limit_sensor.crf --depend .\limit_sensor.d)
+I (C:\Program Files\ARM\ARMCC\include\stdint.h)(0x51C86E14)
+I (C:\Program Files\ARM\ARMCC\include\stdlib.h)(0x51C86E14)
+I (tm4c123gh6pm.h)(0x5B8F27A8)
+I (SysTick.h)(0x5BB95EC4)
