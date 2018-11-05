@@ -22,26 +22,42 @@
  http://users.ece.utexas.edu/~valvano/
  */
 
-#ifndef __TIMER2INTS_H__ // do not include more than once
-#define __TIMER2INTS_H__
-#include <stdint.h>
-// ***************** Timer2_Init ****************
-// Activate Timer2 interrupts to run user task periodically
-// Inputs:  task is a pointer to a user function
-//          period in units (1/clockfreq)
-// Outputs: none
-void Timer2_Init(void(*task)(void), uint32_t period);
+#ifndef __TIMERS_H__ // do not include more than once
+#define __TIMERS_H__
+void Timer0A_Init(void(*task)(void),uint32_t period, uint32_t priority);
+void Timer0A_EnableClock(void);
+void Timer0A_DisableClock(void);
+void Timer0A_Reload(uint32_t period);
+void Timer0A_Arm(void);
+void Timer0A_Disarm(void);
+void Timer0A_Ack(void);
+void Timer0A_Handler(void);
 
-#endif // __TIMER2INTS_H__
+void Timer1A_Init(void(*task)(void),uint32_t period, uint32_t priority);
+void Timer1A_EnableClock(void);
+void Timer1A_DisableClock(void);
+void Timer1A_Reload(uint32_t period);
+void Timer1A_Arm(void);
+void Timer1A_Disarm(void);
+void Timer1A_Ack(void);
+void Timer1A_Handler(void);
 
-#ifndef __TIMER3INTS_H__ // do not include more than once
-#define __TIMER3INTS_H__
-#include <stdint.h>
-// ***************** Timer3_Init ****************
-// Activate Timer3 interrupts to run user task periodically
-// Inputs:  task is a pointer to a user function
-//          period in units (1/clockfreq)
-// Outputs: none
-void Timer3_Init(void(*task)(void), uint32_t period);
+void Timer2A_Init(void(*task)(void),uint32_t period, uint32_t priority);
+void Timer2A_EnableClock(void);
+void Timer2A_DisableClock(void);
+void Timer2A_Reload(uint32_t period);
+void Timer2A_Arm(void);
+void Timer2A_Disarm(void);
+void Timer2A_Ack(void);
+void Timer2A_Handler(void);
+
+void Timer3A_Init(void(*task)(void),uint32_t period, uint32_t priority);
+void Timer3A_EnableClock(void);
+void Timer3A_DisableClock(void);
+void Timer3A_Reload(uint32_t period);
+void Timer3A_Arm(void);
+void Timer3A_Disarm(void);
+void Timer3A_Ack(void);
+void Timer3A_Handler(void);
 
 #endif // __TIMER3INTS_H__

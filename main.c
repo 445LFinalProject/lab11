@@ -11,16 +11,20 @@
 #include "Blynk.h"
 #include "stepper.h"
 #include "Limit_Sensor.h"
+#include "matrix.h"
 
 void EnableInterrupts(void);    // Defined in startup.s
 void DisableInterrupts(void);   // Defined in startup.s
 void WaitForInterrupt(void);    // Defined in startup.s
 
 #define speed 1600
+char Buffer[16];
+uint32_t KeyCount;
 int main(void){       
   PLL_Init(Bus80MHz);   // Bus clock at 80 MHz
   DisableInterrupts();  // Disable interrupts until finished with inits
-  PortF_Init();
+  
+	PortF_Init();
   LastF = PortF_Input();
 	Output_Init();        // initialize ST7735
 #ifdef DEBUG3
@@ -34,15 +38,19 @@ int main(void){
   ESP8266_Reset();      // Reset the WiFi module
   ESP8266_SetupWiFi();  // Setup communications to Blynk Server  
   
-  Timer2_Init(&Blynk_to_TM4C,800000); 
+  Timer2A_Init(&Blynk_to_TM4C,800000,4); 
   // check for receive data from Blynk App every 10ms
-  Timer3_Init(&SendInformation,40000000); 
+  Timer3A_Init(&SendInformation,40000000,4); 
   // Send data back to Blynk App every 1/2 second
-  EnableInterrupts();
-
-  /*while(1) {   
-    WaitForInterrupt(); // low power mode
-  }*/
+  
+	uint32_t i=0;
+	//Matrix_Init();Testing matrix
+	EnableInterrupts();
+  while(1) {   
+		//Buffer[i] = Matrix_InChar();//Testing Matrix
+    //i = (i+1)&0x0f;
+   // WaitForInterrupt(); // low power mode
+  }
 	
 	/*stepper motor code calls*/
 	/*Stepper_Init();

@@ -174,6 +174,7 @@ int main1(void){
   DisableInterrupts();  // Disable interrupts until finished with inits
   PortF_Init();
   LastF = PortF_Input();
+	
 #ifdef DEBUG3
   Output_Init();        // initialize ST7735
   ST7735_OutString("EE445L Lab 4D\nBlynk example\n");
@@ -186,10 +187,10 @@ int main1(void){
   ESP8266_Reset();      // Reset the WiFi module
   ESP8266_SetupWiFi();  // Setup communications to Blynk Server  
   
-  Timer2_Init(&Blynk_to_TM4C,800000); 
+  Timer2A_Init(&Blynk_to_TM4C,800000,4); 
   // check for receive data from Blynk App every 10ms
 
-  Timer3_Init(&SendInformation,40000000); 
+  Timer3A_Init(&SendInformation,40000000,4); 
   // Send data back to Blynk App every 1/2 second
   EnableInterrupts();
 
