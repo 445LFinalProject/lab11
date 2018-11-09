@@ -12,3 +12,4 @@
 .\main.o: Blynk.h
 .\main.o: stepper.h
 .\main.o: Limit_Sensor.h
+.\main.o: matrix.h

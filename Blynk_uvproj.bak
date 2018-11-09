@@ -461,9 +461,9 @@
               <FilePath>.\stepper.c</FilePath>
             </File>
             <File>
-              <FileName>Ports.c</FileName>
+              <FileName>Limit_Sensor.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\Ports.c</FilePath>
+              <FilePath>.\Limit_Sensor.c</FilePath>
             </File>
           </Files>
         </Group>
