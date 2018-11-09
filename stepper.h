@@ -35,11 +35,11 @@ void Stepper_Init(void);
 
 // Move 1.8 degrees clockwise, 
 // delay is the time to wait after each step in bus cycles
-void Stepper_CW(uint32_t delay);
+void door_Open(uint32_t delay);
 
 // Move 1.8 degrees counterclockwise,
 // delay is the time to wait after each step in bus cycles
-void Stepper_CCW(uint32_t delay);
+void door_Close(uint32_t delay);
 
 // Turn stepper motor to desired position
 // (0 <= desired <= 199)
