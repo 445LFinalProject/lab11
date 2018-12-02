@@ -570,7 +570,7 @@ void Delay1ms(uint32_t n){uint32_t volatile time;
 // than the equivalent code.  Companion function follows.
 #define DELAY 0x80
 static const uint8_t
-  Bcmd[] = {                  // Initialization commands for 7735B screens
+	Bcmd[] = {  
     18,                       // 18 commands in list:
     ST7735_SWRESET,   DELAY,  //  1: Software reset, no args, w/delay
       50,                     //     50 ms delay
