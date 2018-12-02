@@ -198,7 +198,7 @@ void Timer3A_DisableClock(void){
 }
 
 void Timer3A_Reload(uint32_t period){
-	TIMER0_TAILR_R = period; 
+	TIMER3_TAILR_R = period; 
 }
 void Timer3A_Arm(void){
 	NVIC_EN1_R = 1<<3;              // enable interrupt 19 in NVIC
@@ -234,6 +234,8 @@ void Timer4A_Init(void(*task)(void),uint32_t period, uint32_t priority){
 	NVIC_PRI8_R = (NVIC_PRI8_R|priority);
   NVIC_EN1_R = 1 << 3; 
 	EnableInterrupts();
+	nvic 16 21-23
+	irq 70
 }
 
 
@@ -256,5 +258,47 @@ void Timer4A_Disarm(void){
 void Timer4A_Ack(void){
 	TIMER3_ICR_R = TIMER_ICR_TATOCINT;
 }
- 
+
+ todo timer 5A
+void Timer5A_Init(void(*task)(void),uint32_t period, uint32_t priority){
+	volatile uint32_t delay;
+	SYSCTL_RCGCTIMER_R |= 0x04;   						// 0) activate TIMER2
+  delay = SYSCTL_RCGCTIMER_R;   						// allow time to finish activating
+	DisableInterrupts();
+  TIMER5_CTL_R = 0x00000000;   							// 1) disable TIMER2A during setup
+  TIMER5_CFG_R = 0x00000000;    						// 2) configure for 32-bit mode
+  TIMER5_TAMR_R = TIMER_TAMR_TAMR_PERIOD;   // 3) configure for periodic mode, down-count 
+  TIMER5_TAILR_R = period;  								// 4) reload value resets every 64ms second
+  TIMER5_TAPR_R = 0;            						// 5) bus clock resolution
+	TIMER5_IMR_R = TIMER_IMR_TATOIM;
+	TIMER5_ICR_R = TIMER_ICR_TATOCINT; 
+	priority = (priority&0x07)<<29;
+  NVIC_PRI8_R = (NVIC_PRI8_R&0x00FFFFFF); // 8) priority 4 // 15-13  0 1 2 3    4 5 6 7    8 9 10 11    12 13 14 15
+	NVIC_PRI8_R = (NVIC_PRI8_R|priority);
+  NVIC_EN1_R = 1 << 3; 
+	EnableInterrupts();
+	nvic 22 13-15
+	irq 92
+}
+
+
+void Timer5A_EnableClock(void){
+	TIMER5_CTL_R |= TIMER_CTL_TAEN;  // enable Timer2A 32-b, periodic, interrupts
+}
+void Timer5A_DisableClock(void){
+	TIMER5_CTL_R &= ~TIMER_CTL_TAEN; // disable Timer2A during setup
+}
+
+void Timer5A_Reload(uint32_t period){
+	TIMER5_TAILR_R = period; 
+}
+void Timer5A_Arm(void){
+	NVIC_EN1_R = 1<<3;              // enable interrupt 19 in NVIC
+}
+void Timer5A_Disarm(void){
+	NVIC_DIS1_R = 1<<3;              // enable interrupt 19 in NVIC
+}
+void Timer5A_Ack(void){
+	TIMER3_ICR_R = TIMER_ICR_TATOCINT;
+}
 */

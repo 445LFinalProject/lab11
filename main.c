@@ -31,9 +31,9 @@ char serial_buf[64];
 char Pin_Number[2]   = "99";       // Initialize to invalid pin number
 char Pin_Integer[8]  = "0000";     //
 char Pin_Float[8]    = "0.0000";   //
-uint32_t pin_num; 
+uint32_t pin_num;
 uint32_t pin_int;
- 
+
  // Initialize PortF switches and LEDs
 void PortF_Init(void){ volatile uint32_t delay;
   SYSCTL_RCGCGPIO_R |= 0x00000020;  // 1) activate clock for Port F
@@ -76,8 +76,8 @@ void TM4C_to_Blynk(uint32_t pin,uint32_t value){
   ESP8266_OutChar(',');
   ESP8266_OutString("0.0\n");  // Null value not used in this example
 }
- 
- 
+
+
 // -------------------------   Blynk_to_TM4C  -----------------------------------
 // This routine receives the Blynk Virtual Pin data via the ESP8266 and parses the
 // data and feeds the commands to the TM4C.
@@ -92,19 +92,19 @@ void Blynk_to_TM4C(void){int j; char data;
       UART_OutChar(data);        // Debug only
       j++;
     }while(data != '\n');
-    UART_OutChar('\r');        
+    UART_OutChar('\r');
 #endif
-           
+
 // Rip the 3 fields out of the CSV data. The sequence of data from the 8266 is:
 // Pin #, Integer Value, Float Value.
     strcpy(Pin_Number, strtok(serial_buf, ","));
     strcpy(Pin_Integer, strtok(NULL, ","));       // Integer value that is determined by the Blynk App
     strcpy(Pin_Float, strtok(NULL, ","));         // Not used
     pin_num = atoi(Pin_Number);     // Need to convert ASCII to integer
-    pin_int = atoi(Pin_Integer);  
+    pin_int = atoi(Pin_Integer);
   // ---------------------------- VP #1 ----------------------------------------
   // This VP is the LED select button
-    if(pin_num == 0x01)  {  
+    if(pin_num == 0x01)  {
       LED = pin_int;
       PortF_Output(LED<<2); // Blue LED
 #ifdef DEBUG3
@@ -113,7 +113,7 @@ void Blynk_to_TM4C(void){int j; char data;
       ST7735_OutUDec(LED);
       ST7735_OutChar('\n');
 #endif
-    }                               // Parse incoming data        
+    }                               // Parse incoming data
 #ifdef DEBUG1
     UART_OutString(" Pin_Number = ");
     UART_OutString(Pin_Number);
@@ -123,7 +123,7 @@ void Blynk_to_TM4C(void){int j; char data;
     UART_OutString(Pin_Float);
     UART_OutString("\n\r");
 #endif
-  }  
+  }
 }
 
 void SendInformation(void){
@@ -142,19 +142,20 @@ void SendInformation(void){
   LastF = thisF;
 }
 
-  
+
 
 
 
 
 LockState lockState = {false,0,"1234","    ",0,{0,1,2,3},0,false};
-int main(void){       
+int main(void){
   PLL_Init(Bus80MHz);   // Bus clock at 80 MHz
   DisableInterrupts();  // Disable interrupts until finished with inits
   /*
 	PortF_Init();
   LastF = PortF_Input();
 	Output_Init();        // initialize ST7735
+	//ST7735_InitR(INITR_REDTAB);
 #ifdef DEBUG3
   ST7735_OutString("EE445L Lab 4D\nBlynk example\n");
 #endif
@@ -164,69 +165,28 @@ int main(void){
 #endif
   ESP8266_Init();       // Enable ESP8266 Serial Port
   ESP8266_Reset();      // Reset the WiFi module
-  ESP8266_SetupWiFi();  // Setup communications to Blynk Server  
-  
-  Timer2A_Init(&Blynk_to_TM4C,800000,4); 
+  ESP8266_SetupWiFi();  // Setup communications to Blynk Server
+
+  Timer2A_Init(&Blynk_to_TM4C,800000,4);
   // check for receive data from Blynk App every 10ms
-  Timer3A_Init(&SendInformation,40000000,4); 
+  Timer3A_Init(&SendInformation,40000000,4);
   // Send data back to Blynk App every 1/2 second
   */
 	uint32_t i=0;
 	Matrix_Init();				//Testing matrix
 	EnableInterrupts();
-	
-  while(1) {   
+
+  while(1) {
 		Buffer[i] = Matrix_InChar();//Testing Matrix
 		processInput(lockState.state[lockState.indexState],Buffer[i],0);
 		//Display(State)
     i = (i+1)&0x03;
    // WaitForInterrupt(); // low power mode
   }
-	
-	/*stepper motor code calls*/
-	/*Stepper_Init();
-  Stepper_CW(speed);   // Pos=1; GPIO_PORTD_DATA_R=9
-  Stepper_CW(speed);   // Pos=2; GPIO_PORTD_DATA_R=5
-  Stepper_CW(speed);   // Pos=3; GPIO_PORTD_DATA_R=6
-  Stepper_CW(speed);   // Pos=4; GPIO_PORTD_DATA_R=10
-  Stepper_CW(speed);   // Pos=5; GPIO_PORTD_DATA_R=9
-  Stepper_CW(speed);   // Pos=6; GPIO_PORTD_DATA_R=5
-  Stepper_CW(speed);   // Pos=7; GPIO_PORTD_DATA_R=6
-  Stepper_CW(speed);   // Pos=8; GPIO_PORTD_DATA_R=10
+
+	//stepper motor code calls*/
+	Stepper_Init();
   while(1){
-    Stepper_CW(10*speed);   // output every 10ms
-  }*/	
-	
-	
-	
-	//main1
-	/*
-	 PLL_Init(Bus80MHz);   // Bus clock at 80 MHz
-  DisableInterrupts();  // Disable interrupts until finished with inits
-  PortF_Init();
-  LastF = PortF_Input();
-	
-#ifdef DEBUG3
-  Output_Init();        // initialize ST7735
-  ST7735_OutString("EE445L Lab 4D\nBlynk example\n");
-#endif
-#ifdef DEBUG1
-  UART_Init(5);         // Enable Debug Serial Port
-  UART_OutString("\n\rEE445L Lab 4D\n\rBlynk example");
-#endif
-  ESP8266_Init();       // Enable ESP8266 Serial Port
-  ESP8266_Reset();      // Reset the WiFi module
-  ESP8266_SetupWiFi();  // Setup communications to Blynk Server  
-  
-  Timer2A_Init(&Blynk_to_TM4C,800000,4); 
-  // check for receive data from Blynk App every 10ms
-
-  Timer3A_Init(&SendInformation,40000000,4); 
-  // Send data back to Blynk App every 1/2 second
-  EnableInterrupts();
-
-  while(1) {   
-    WaitForInterrupt(); // low power mode
+    //door_Open(10*speed);   // output every 10ms
   }
-	*/
 }
