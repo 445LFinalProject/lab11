@@ -50,7 +50,7 @@ void EnableInterrupts(void);    // Defined in startup.s
 void DisableInterrupts(void);   // Defined in startup.s
 void WaitForInterrupt(void);    // Defined in startup.s
 
-
+/*
 // These 6 variables contain the most recent Blynk to TM4C123 message
 // Blynk to TM4C123 uses VP0 to VP15
 char serial_buf[64];
@@ -198,5 +198,5 @@ int main1(void){
     WaitForInterrupt(); // low power mode
   }
 }
-
+*/
 

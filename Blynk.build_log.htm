@@ -4,41 +4,55 @@
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
 C:\Keil\EE319K_445Lware2018\EE445LProjects\Lab_11_Final\Blynk.uvproj
-Project File Date:  11/04/2018
+Project File Date:  11/14/2018
 
 <h2>Output:</h2>
 Build target 'Blynk'
-compiling Timers.c...
+compiling stateprocessor.c...
+stateprocessor.h(19): warning:  #1295-D: Deprecated declaration validComparison - give arg types
+  bool validComparison();
+stateprocessor.h(20): warning:  #1295-D: Deprecated declaration deletePassword - give arg types
+  bool deletePassword();
+stateprocessor.h(22): warning:  #1295-D: Deprecated declaration removeBufferInput - give arg types
+  void removeBufferInput();
+stateprocessor.c(157): warning:  #1-D: last line of file ends without a newline
+  }
+stateprocessor.c(141): warning:  #177-D: variable "idk" was declared but never referenced
+        uint32_t idk;
+stateprocessor.c(67): warning:  #177-D: variable "editTry" was declared but never referenced
+  static uint8_t editTry=0;
+stateprocessor.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=2656 RO-data=72 RW-data=208 ZI-data=2016  
-".\Blynk.axf" - 0 Error(s), 0 Warning(s).
+Program Size: Code=3076 RO-data=72 RW-data=272 ZI-data=2000  
+".\Blynk.axf" - 0 Error(s), 6 Warning(s).
 Load "C:\\Keil\\EE319K_445Lware2018\\EE445LProjects\\Lab_11_Final\\Blynk.axf" 
 Connecting: Mode=JTAG, Speed=1000000Hz
 Erase Done.
 Programming Done.
 Verify OK.
-Erase Done.
-Programming Done.
-Verify OK.
-W-data=208 ZI-data=2016  
-".\Blynk.axf" - 0 Error(s), 0 Warning(s).
-ndefined symbol Timer3_Init (referred from blynk.o).
+k.o).
+.\Blynk.axf: Error: L6200E: Symbol PortF_Init multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol PortF_Input multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol PortF_Output multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol SendInformation multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol TM4C_to_Blynk multiply defined (by main.o and blynk.o).
 Not enough information to list image symbols.
-Finished: 1 information, 0 warning and 2 error messages.
-".\Blynk.axf" - 2 Error(s), 2 Warning(s).
+Not enough information to list the image map.
+Finished: 2 information, 0 warning and 12 error messages.
+".\Blynk.axf" - 12 Error(s), 3 Warning(s).
 Target not created
-Symbol PeriodicTask2 multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol PeriodicTask3 multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer0A_Ack multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer0A_Arm multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer0A_DisableClock multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer0A_Disarm multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer0A_EnableClock multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer0A_Init multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer0A_Reload multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer1A_Ack multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer1A_Arm multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer1A_DisableClock multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer1A_Disarm multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer1A_EnableClock multiply defined (by matrix.o and timers.o).
-.\Blynk.axf: Error: L6200E: Symbol Timer1A_Ini
+(by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol Pin_Float multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol pin_num multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol pin_int multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol Blynk_to_TM4C multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol PortF_Init multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol PortF_Input multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol PortF_Output multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol SendInformation multiply defined (by main.o and blynk.o).
+.\Blynk.axf: Error: L6200E: Symbol TM4C_to_Blynk multiply defined (by main.o and blynk.o).
+Not enough information to list image symbols.
+Not enough information to list the image map.
+Finished: 2 information, 0 warning and 12 error messages.
+".\Blynk.axf" - 12 Error(s), 9 Warning(s).
+Target not created

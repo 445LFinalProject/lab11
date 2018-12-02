@@ -72,6 +72,8 @@ void MatrixKeypad_Init(void){
   GPIO_PORTB_DEN_R |= 0xFF;        	// enable digital I/O on PA5-2
   GPIO_PORTB_DIR_R &= 0x0F;       	// make PB7-4 input 
   GPIO_PORTB_DIR_R |= 0x0F;					//making PB0-3 output
+	//GPIO_PORTB_PUR_R |= 
+	GPIO_PORTB_PUR_R |= 0xF0;
 	GPIO_PORTB_PCTL_R = (GPIO_PORTB_PCTL_R&0xFF0000FF)+0x00000000;
   GPIO_PORTB_AFSEL_R = 0;     // disable alternate functionality on PB
   GPIO_PORTB_AMSEL_R = 0;     // disable analog functionality on PB
@@ -120,6 +122,7 @@ char MatrixKeypad_Scan(int32_t *Num){
 char static LastKey; 
 void Matrix_Handler(void)
 {
+
 	char thisKey; 
 	int32_t n;
   thisKey = MatrixKeypad_Scan(&n); // scan 

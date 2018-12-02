@@ -181,7 +181,7 @@ void Timer3A_Init(void(*task)(void), uint32_t period, uint32_t priority){
   TIMER3_TAILR_R = period;  								// 4) reload value resets every 64ms second
   TIMER3_TAPR_R = 0;            						// 5) bus clock resolution
 	TIMER3_IMR_R = TIMER_IMR_TATOIM;
-	TIMER3_ICR_R = TIMER_ICR_TATOCINT; 
+	TIMER3_ICR_R = 0x00000001; 
 	priority = (priority&0x07)<<29;
   NVIC_PRI8_R = (NVIC_PRI8_R&0x00FFFFFF); // 8) priority 4 // 15-13  0 1 2 3    4 5 6 7    8 9 10 11    12 13 14 15
 	NVIC_PRI8_R = (NVIC_PRI8_R|priority);

@@ -465,6 +465,16 @@
               <FileType>1</FileType>
               <FilePath>.\Limit_Sensor.c</FilePath>
             </File>
+            <File>
+              <FileName>matrix.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\matrix.c</FilePath>
+            </File>
+            <File>
+              <FileName>stateprocessor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\stateprocessor.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
