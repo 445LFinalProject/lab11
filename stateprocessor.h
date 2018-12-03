@@ -5,6 +5,7 @@
 #include "stdint.h"
 struct LockState{
 	bool wifiCommunication;
+	bool reEnterNewPassword;
 	uint8_t passwordAttempts;
 	char passwordBuffer[4];
 	char inputPasswordbuffer[4];
@@ -17,6 +18,7 @@ typedef struct LockState LockState;
 
 void correctPasswordChangeState(bool change);
 bool validComparison();
+void reEnterNewPasswordState();
 bool deletePassword();
 bool comparePasswords(bool compare);
 void removeBufferInput();

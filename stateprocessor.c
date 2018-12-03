@@ -1,5 +1,6 @@
 
 #include "stateprocessor.h"
+//#include "LCDDriver.c"
 #define speed 1600
 #define CLOSED 0;
 #define OPEN 1;
@@ -8,8 +9,16 @@
 
 extern LockState lockState;
 
-//This function will change
-//TODO else statement, erase completely password
+void eraseEntireInputBuffer()
+{
+	for (int i=0; i<4; i++)
+	{
+		lockState.inputPasswordbuffer[i]=' ';
+	}
+	lockState.indexInputPasswordBuffer=0;
+}
+
+//check whether or not the right password was inputted
 void correctPasswordChangeState(bool change){
 	if(change)
 	{
@@ -18,8 +27,8 @@ void correctPasswordChangeState(bool change){
 		lockState.inputPasswordbuffer[0]=' ';
 		lockState.indexInputPasswordBuffer=0;
 		//	Closed to Open erase buffer input once open 
-		
-	}else
+		//**************OpenPage();
+	}else//TODO TEST this case
 	{
 		lockState.passwordAttempts++;
 		if(lockState.passwordAttempts==3)
@@ -27,12 +36,13 @@ void correctPasswordChangeState(bool change){
 			//lock and goes back to state
 			lockState.indexState=CLOSED;
 			lockState.lockInputs=true;
+			//CloseDisabledPage();
 		}
-		/*else TODO
+		else
 		{
 			//erase inputPasswordbuffer
-			//same state but show in display incorrect password
-		}*/
+			//********8DisplayWrongPassword();
+		}
 	}
 }
 bool validComparison(){
@@ -52,34 +62,66 @@ bool comparePasswords(bool compare){
 	}
 	return true;
 }
+
 void removeBufferInput(){
 	if (lockState.indexInputPasswordBuffer>0)
 	{
 		lockState.inputPasswordbuffer[lockState.indexInputPasswordBuffer]=' ';
 		lockState.indexInputPasswordBuffer--;
-		//lcd must be notified.
+		//LCD ERASE ASTRICT METHOD 
 	}else if (lockState.indexInputPasswordBuffer==0)
 	{
 		lockState.inputPasswordbuffer[lockState.indexInputPasswordBuffer]=' ';
 	}
 	/*else generate invalid sound*/
 }
-static uint8_t editTry=0;
-//access global variable
-void compareEditPasswords()
+
+//reenter password state determines 2 things 
+// one is if the right password has been re entered
+// second whether or not to move states
+void reEnterNewPasswordState()
 {
-	
+	static char storeTempNewPassword[4];
+	int i;
+	if (lockState.indexInputPasswordBuffer==3)
+	{
+		if (!lockState.reEnterNewPassword)
+			{
+				//first run through state
+				lockState.reEnterNewPassword=true;
+				storeTempNewPassword[0]=lockState.inputPasswordbuffer[0];
+				storeTempNewPassword[1]=lockState.inputPasswordbuffer[1];
+				storeTempNewPassword[2]=lockState.inputPasswordbuffer[2];
+				storeTempNewPassword[3]=lockState.inputPasswordbuffer[3];
+				lockState.indexState=EDITPASSWORD;
+				//**********DisplayEnterAgain();
+				removeBufferInput();
+				removeBufferInput();
+				removeBufferInput();
+				removeBufferInput();
+				//
+			}
+		else
+		{
+			lockState.reEnterNewPassword=false;
+			for (i=0; i<4; i++)
+				if (storeTempNewPassword[i]!=lockState.inputPasswordbuffer[i])
+				{
+					eraseEntireInputBuffer();
+					//***********DisplayNotMatch();
+					return;
+				}
+			removeBufferInput();
+			removeBufferInput();
+			removeBufferInput();
+			removeBufferInput();
+			for (i=0; i<4; i++)
+				lockState.passwordBuffer[i] = lockState.inputPasswordbuffer[i];
+			lockState.indexState=OPEN;
+			//**************OpenPage();
+		}
+	}
 }
-void correctEditPasswordChangeState(){
-	
-}
-//TODO: check in which state one is.
-//when pressing # check what state one is. Two possibilities.
-//first check in input is correct.
-//if in state one save password and dont change
-//else if in two check if input is correct with past
-//						if it is then change lockState.passwordBuffer 
-//						else if it is not correct then don't do anything
 void processEditPasswordState(char input){
 	switch(input){
 		case 'D':
@@ -87,11 +129,13 @@ void processEditPasswordState(char input){
 			break;
 		case '#':
 			//make correct passwords change 
-			
-			//correctEditPasswordChangeState(compareEditPasswords(validComparison()));
+			reEnterNewPasswordState();
 			break;
-		//default:
-			//valid sound
+		default:
+			lockState.inputPasswordbuffer[lockState.indexInputPasswordBuffer]=input;
+			lockState.indexInputPasswordBuffer=(lockState.indexInputPasswordBuffer+1)&0x03;
+			//*************DisplayAstrick(lockState.indexInputPasswordBuffer);
+			break;
 	}
 	
 }
@@ -99,9 +143,12 @@ void processOpenState(char input){
 	switch(input){
 		case 'C':
 			lockState.indexState=CLOSED;
+			//*************ClosePage();
+			//RUN MOTOR FLAG
 		break;
 		case 'A':
 			lockState.indexState=EDITPASSWORD;
+			//*************NewPasswordPage();
 		break;
 		default:
 			//generate invalid sound
@@ -118,10 +165,12 @@ void processEnterPasswordState(char input){
 			break;
 		case 'B':
 			lockState.indexState=CLOSED;
+			//*************ClosePage();
 			break;
 		default:
 			lockState.inputPasswordbuffer[lockState.indexInputPasswordBuffer]=input;
 			lockState.indexInputPasswordBuffer=(lockState.indexInputPasswordBuffer+1)&0x03;
+			//**************DisplayAstrick(lockState.indexInputPasswordBuffer);
 			break;
 	}
 }
@@ -132,17 +181,20 @@ void processClosedState(char  input){
 			lockState.indexState=ENTERPASSWORD;
 			//GENERATE VALID SOUND
 		}
-		/*
-		else
-			generate invalid sound
-		*/
+		/*else
+		{
+			
+			//generate invalid sound
+		}*/
 }
+//TODO: TIMER for Display wifi
 void processInput(uint32_t currentState,char input, uint32_t passwordSize){
 	uint32_t idk;
 	switch(currentState)
 	{
 		case 0	://CLOSED
 			processClosedState(input);
+			//************ClosePage();
 			break;
 		case 1	://OPEN
 			processOpenState(input);
@@ -150,6 +202,7 @@ void processInput(uint32_t currentState,char input, uint32_t passwordSize){
 		case 2	://ENTER PASSWORD
 			//TODO /implement method for when to many attempts
 			//			are performed
+			//**************EnterPasswordPage();
 			processEnterPasswordState(input);
 			break;
 		case 3	://EDIT PASSWORD
