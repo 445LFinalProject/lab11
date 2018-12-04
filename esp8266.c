@@ -28,8 +28,8 @@
 #include "ST7735.h"
 #include "esp8266.h"
 // the following two lines connect you to the internet
-char    ssid[32]        = "EE-IOT-Platform-03";
-char    pass[32]        = "dUQQE?&W44x7";
+char    ssid[32]        = "Robin's iPhone";
+char    pass[32]        = "1234567890";
 // create your own Blynk server app and edit this next line with your authentication code
 char    auth[64]        = "9cbe612c858d4357b26c091272f00f0e";
 

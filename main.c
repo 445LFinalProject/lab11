@@ -14,6 +14,7 @@
 #include "Limit_Sensor.h"
 #include "matrix.h"
 #include "stateprocessor.h"
+#include "LCDDriver.h"
 
 void EnableInterrupts(void);    // Defined in startup.s
 void DisableInterrupts(void);   // Defined in startup.s
@@ -43,10 +44,10 @@ void PortF_Init(void){ volatile uint32_t delay;
   // only PF0 needs to be unlocked, other bits can't be locked
   GPIO_PORTF_AMSEL_R = 0x00;        // 3) disable analog on PF
   GPIO_PORTF_PCTL_R = 0x00000000;   // 4) PCTL GPIO on PF4-0
-  GPIO_PORTF_DIR_R = 0x0E;          // 5) PF4,PF0 in, PF3-1 out
+  GPIO_PORTF_DIR_R = 0x0F;          // 5) PF4,PF0 in, PF3-1 out
   GPIO_PORTF_AFSEL_R = 0x00;        // 6) disable alt funct on PF7-0
-  GPIO_PORTF_PUR_R = 0x11;          // enable pull-up on PF0 and PF4
-  GPIO_PORTF_DEN_R = 0x1F;          // 7) enable digital I/O on PF4-0
+  //GPIO_PORTF_PUR_R = 0x0F;          // enable pull-up on PF0 and PF4
+  GPIO_PORTF_DEN_R = 0x0F;          // 7) enable digital I/O on PF4-0
 }
 // read switches,
 // Bit4 and Bit0 are in negative logic
@@ -144,15 +145,19 @@ void SendInformation(void){
 
 
 
+void blynkPorfF(void)
+{
+	GPIO_PORTF_DATA_R ^= 0x01;
+}
 
 
-
-LockState lockState = {false,0,"1234","    ",0,{0,1,2,3},0,false};
+LockState lockState = {false,false,0,"1234","    ",0,{0,1,2,3},0,false};
 int main(void){
   PLL_Init(Bus80MHz);   // Bus clock at 80 MHz
   DisableInterrupts();  // Disable interrupts until finished with inits
-  /*
+  
 	PortF_Init();
+	/*
   LastF = PortF_Input();
 	Output_Init();        // initialize ST7735
 	//ST7735_InitR(INITR_REDTAB);
@@ -174,6 +179,9 @@ int main(void){
   */
 	uint32_t i=0;
 	Matrix_Init();				//Testing matrix
+	InitializeLCD();
+	//blynks every two seconds
+	Timer5A_Init(blynkPorfF,8000000,1);
 	EnableInterrupts();
 
   while(1) {

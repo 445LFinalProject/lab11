@@ -27,6 +27,6 @@ void processOpenState(char input);
 void processEnterPasswordState(char input);
 void processClosedState(char  input);
 void processInput(uint32_t currentState,char input, uint32_t passwordSize);
-
+void addValueToInputBuffer(char input);
 typedef struct LockState LockState;
 #endif

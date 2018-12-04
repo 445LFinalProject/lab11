@@ -5,7 +5,7 @@
 
 #define	CLOSED 0
 #define OPEN 	1
-#define LIMBO 2
+#define LIMBO -1
 void (*Door_Close)(void);    // user function to be executed on touch
 void (*Door_Open)(void);  // user function to be executed on release
 
@@ -50,7 +50,7 @@ void GPIOPortF_Handler(void){
 	GPIOLimitArm();
 }
 
-uint8_t get_Door_Status(void){
+int8_t get_Door_Status(void){
 	//make sure limit sensor output when pressed is 1
 	if(GPIO_PORTF_DATA_R&0x01) return CLOSED;
 	else if(GPIO_PORTF_DATA_R&0x02) return OPEN;

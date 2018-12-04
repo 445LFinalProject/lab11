@@ -51,7 +51,7 @@ const struct State *Pt;// Current State
 
 #define STEPPER  (*((volatile uint32_t *)0x4000703C))
 // Move 1.8 degrees clockwise, delay is the time to wait after each step
-void Stepper_CW(uint32_t delay){
+void door_Open(uint32_t delay){
   Pt = Pt->Next[clockwise];     // circular
 	STEPPER = Pt->Out; // step motor
   if(Pos==199){      // shaft angle
@@ -63,7 +63,7 @@ void Stepper_CW(uint32_t delay){
   SysTick_Wait(delay);
 }
 // Move 1.8 degrees counterclockwise, delay is wait after each step
-void Stepper_CCW(uint32_t delay){
+void door_Close(uint32_t delay){
   Pt = Pt->Next[counterclockwise]; // circular
   STEPPER = Pt->Out; // step motor
   if(Pos==0){        // shaft angle
@@ -77,16 +77,22 @@ void Stepper_CCW(uint32_t delay){
 // Initialize Stepper interface
 void Stepper_Init(void){
   SYSCTL_RCGCGPIO_R |= 0x08; // 1) activate port D
+	while((SYSCTL_PRGPIO_R & 0x00000008) == 0){};
   SysTick_Init();
   Pos = 0;                   
   Pt = &fsm[0]; 
                                     // 2) no need to unlock PD3-0
 //  GPIO_PORTD_AMSEL_R &= ~0x0F;      // 3) disable analog functionality on PD3-0
 //  GPIO_PORTD_PCTL_R &= ~0x0000FFFF; // 4) GPIO configure PD3-0 as GPIO
-  GPIO_PORTD_DIR_R |= 0xF0;   // 5) make PD4-7 out
+  /*GPIO_PORTD_DIR_R |= 0xF0;   // 5) make PD4-7 out
   GPIO_PORTD_AFSEL_R &= ~0xF0;// 6) disable alt funct on PD4-7
   GPIO_PORTD_DR8R_R |= 0xF0;  // enable 8 mA drive
-  GPIO_PORTD_DEN_R |= 0xF0;   // 7) enable digital I/O on PD4-7 
+  GPIO_PORTD_DEN_R |= 0xF0;   // 7) enable digital I/O on PD4-7 */
+	
+  GPIO_PORTD_DIR_R |= 0x0F;   // 5) make PD3-0 out
+  GPIO_PORTD_AFSEL_R &= ~0x0F;// 6) disable alt funct on PD3-0
+  GPIO_PORTD_DR8R_R |= 0x0F;  // enable 8 mA drive
+  GPIO_PORTD_DEN_R |= 0x0F;   // 7) enable digital I/O on PD3-0 
 }
 
 // Turn stepper motor to desired position
@@ -99,12 +105,12 @@ short CWsteps;
   } // CW steps is 0 to 199
   if(CWsteps > 100){
     while(desired != Pos){
-      Stepper_CCW(time);
+      door_Close(time);
     }
   }
   else{
     while(desired != Pos){
-      Stepper_CW(time);
+      door_Open(time);
     }
   }
 }

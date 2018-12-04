@@ -60,4 +60,22 @@ void Timer3A_Disarm(void);
 void Timer3A_Ack(void);
 void Timer3A_Handler(void);
 
+
+void Timer4A_Init(void(*task)(void),uint32_t period, uint32_t priority);
+void Timer4A_EnableClock(void);
+void Timer4A_DisableClock(void);
+void Timer4A_Reload(uint32_t period);
+void Timer4A_Arm(void);
+void Timer4A_Disarm(void);
+void Timer4A_Ack(void);
+
+void Timer5A_Init(void(*task)(void),uint32_t period, uint32_t priority);
+void Timer5A_EnableClock(void);
+void Timer5A_DisableClock(void);
+void Timer5A_Reload(uint32_t period);
+void Timer5A_Arm(void);
+void Timer5A_Disarm(void);
+void Timer5A_Ack(void);
+
+
 #endif // __TIMER3INTS_H__
