@@ -276,7 +276,7 @@ void Timer5A_Init(void(*task)(void),uint32_t period, uint32_t priority){
 	priority = (priority&0x07)<<5;
   NVIC_PRI23_R = (NVIC_PRI23_R&0xFFFFFF1F); // 8) priority 4 // 15-13  0 1 2 3    4 5 6 7    8 9 10 11    12 13 14 15
 	NVIC_PRI23_R = (NVIC_PRI23_R|priority);
-  NVIC_EN3_R = 1 << 28; 
+  NVIC_EN2_R = 1 << 28; 
 	TIMER5_CTL_R |= TIMER_CTL_TAEN;
 	EnableInterrupts();
 	//nvic 22 13-15
@@ -295,10 +295,10 @@ void Timer5A_Reload(uint32_t period){
 	TIMER5_TAILR_R = period; 
 }
 void Timer5A_Arm(void){
-	NVIC_EN3_R = 1<<28;              // enable interrupt 19 in NVIC
+	NVIC_EN2_R = 1<<28;              // enable interrupt 19 in NVIC
 }
 void Timer5A_Disarm(void){
-	NVIC_DIS3_R = 1<<28;              // enable interrupt 19 in NVIC
+	NVIC_DIS2_R = 1<<28;              // enable interrupt 19 in NVIC
 }
 void Timer5A_Ack(void){
 	TIMER5_ICR_R = TIMER_ICR_TATOCINT;
