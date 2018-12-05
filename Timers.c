@@ -222,6 +222,7 @@ void Timer4A_Init(void(*task)(void),uint32_t period, uint32_t priority){
 	volatile uint32_t delay;
 	SYSCTL_RCGCTIMER_R |= 0x10;   						// 0) activate TIMER5
   delay = SYSCTL_RCGCTIMER_R;   						// allow time to finish activating
+	PeriodicTask4 = task;         						// user function
 	DisableInterrupts();
   TIMER4_CTL_R = 0x00000000;   							// 1) disable TIMER2A during setup
   TIMER4_CFG_R = 0x00000000;    						// 2) configure for 32-bit mode
@@ -231,9 +232,10 @@ void Timer4A_Init(void(*task)(void),uint32_t period, uint32_t priority){
 	TIMER4_IMR_R = TIMER_IMR_TATOIM;
 	TIMER4_ICR_R = TIMER_ICR_TATOCINT; 
 	priority = (priority&0x07)<<21;
-  NVIC_PRI16_R = (NVIC_PRI16_R&0xFF0FFFFF); // 8) priority 4 // 15-13  0 1 2 3    4 5 6 7    8 9 10 11    12 13 14 15
-	NVIC_PRI16_R = (NVIC_PRI16_R|priority);
-  NVIC_EN3_R = 1 << 6; 
+  NVIC_PRI17_R = (NVIC_PRI17_R&0xFF1FFFFF); // 8) priority 4 // 15-13  0 1 2 3    4 5 6 7    8 9 10 11    12 13 14 15
+	NVIC_PRI17_R = (NVIC_PRI17_R|priority);
+  NVIC_EN2_R = 1 << 6; 
+	TIMER4_CTL_R |= TIMER_CTL_TAEN;
 	EnableInterrupts();
 	//21-23   70
 }
@@ -250,16 +252,20 @@ void Timer4A_Reload(uint32_t period){
 	TIMER4_TAILR_R = period; 
 }
 void Timer4A_Arm(void){
-	NVIC_EN3_R = 1<<6;              // enable interrupt 19 in NVIC
+	NVIC_EN2_R = 1<<6;              // enable interrupt 19 in NVIC
 }
 void Timer4A_Disarm(void){
-	NVIC_DIS3_R = 1<<6;              // enable interrupt 19 in NVIC
+	NVIC_DIS2_R = 1<<6;              // enable interrupt 19 in NVIC
 }
 void Timer4A_Ack(void){
 	TIMER4_ICR_R = TIMER_ICR_TATOCINT;
 }
 
- //todo timer 5A
+void Timer4A_Handler(void){
+  TIMER4_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER2A timeout
+  (*PeriodicTask4)();               // execute user task
+} 
+//todo timer 5A
 void Timer5A_Init(void(*task)(void),uint32_t period, uint32_t priority){
 	volatile uint32_t delay;
 	SYSCTL_RCGCTIMER_R |= 0x20;   						// 0) activate TIMER2
