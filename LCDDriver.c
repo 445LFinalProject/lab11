@@ -2452,6 +2452,7 @@ const unsigned short astrick[] = {
 
 
 //w=111 h=19
+//w=111 h=19
 const unsigned short EnterAgain[] = {
  0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
  0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -2587,7 +2588,6 @@ const unsigned short EnterAgain[] = {
  0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
 
 };
-
 //w=109 h=18
 const unsigned short EnterPassword[] = {
  0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -3974,8 +3974,8 @@ const unsigned short NotMatch[] = {
 
 
 void DisplayWrongPassword(){
-		ST7735_DrawBitmap(10, 39, WrongPassword, 117, 19);
-		ST7735_DrawBitmap(10,59 , EnterAgain, 82, 19);
+		ST7735_DrawBitmap(10, 29, WrongPassword, 117, 19);
+		ST7735_DrawBitmap(10,59 , EnterAgain, 111, 19);
 }
 
 void DisplayClosed(){
@@ -4028,6 +4028,7 @@ void DisplayNewPassword(){
 
 void DisplayEnterAgain(){
 			ST7735_DrawBitmap(10, 59, EnterAgain, 111, 19);
+			
 }
 
 void DisplayNotMatch(){
@@ -4059,9 +4060,9 @@ void EnterPasswordPage(){
 void WrongPasswordPage(){
 	ST7735_FillScreen(ST7735_BLACK);
 	DisplayWrongPassword();
-	DisplayAstrick(4);
+	//DisplayAstrick(4);
 	DisplayGuide();
-	DisplayWifi();
+	//DisplayWifi();
 }
 
 void CloseDisabledPage(){
@@ -4090,9 +4091,9 @@ void EnterAgainPage(){
 void NotMatchPage(){
 	ST7735_FillScreen(ST7735_BLACK);
 	DisplayNotMatch();
-	DisplayAstrick(4);
+	//DisplayAstrick(4);
 	DisplayGuide();
-	DisplayWifi();
+	//DisplayWifi();
 }
 
 void InitializeLCD(){
