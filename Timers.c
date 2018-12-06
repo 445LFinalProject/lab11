@@ -88,7 +88,7 @@ void Timer1A_Init(void(*task)(void),uint32_t period, uint32_t priority){
   NVIC_PRI5_R = (NVIC_PRI5_R&0xFFFF00FF); // 8) priority 4 // 15-13  0 1 2 3    4 5 6 7    8 9 10 11    12 13 14 15
 	NVIC_PRI5_R = NVIC_PRI5_R | priority;
   NVIC_EN0_R = 1<<21;           						// 9) enable IRQ 21 in NVIC must do
-	TIMER0_CTL_R |= TIMER_CTL_TAEN;
+	TIMER1_CTL_R |= TIMER_CTL_TAEN;
 	EnableInterrupts();
 	
 }
