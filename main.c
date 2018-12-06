@@ -15,6 +15,10 @@
 #include "matrix.h"
 #include "stateprocessor.h"
 #include "LCDDriver.h"
+#include "SPIDriver.h"
+#include "musicPlayer.h"
+#include "musicStruct.h"
+
 
 void EnableInterrupts(void);    // Defined in startup.s
 void DisableInterrupts(void);   // Defined in startup.s
@@ -145,18 +149,13 @@ void SendInformation(void){
 
 
 
-void blynkPorfF(void)
-{
-	GPIO_PORTF_DATA_R ^= 0x01;
-}
 
-
-LockState lockState = {false,false,0,"1234","    ",0,{0,1,2,3},0,false};
+LockState lockState = {false,false,0,"1245","    ",0,{0,1,2,3},0,false};
 int main(void){
   PLL_Init(Bus80MHz);   // Bus clock at 80 MHz
   DisableInterrupts();  // Disable interrupts until finished with inits
   
-	PortF_Init();
+//	PortF_Init();
 	/*
   LastF = PortF_Input();
 	Output_Init();        // initialize ST7735
@@ -181,7 +180,7 @@ int main(void){
 	Matrix_Init();				//Testing matrix
 	InitializeLCD();
 	//blynks every two seconds
-	Timer5A_Init(blynkPorfF,8000000,1);
+	//playerInit(TEST1);
 	EnableInterrupts();
 
   while(1) {

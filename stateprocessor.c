@@ -1,6 +1,10 @@
 
 #include "stateprocessor.h"
 #include "LCDDriver.h"
+#include "SPIDriver.h"
+#include "musicPlayer.h"
+#include "musicStruct.h"
+
 #define speed 1600
 #define CLOSED 0;
 #define OPEN 1;
@@ -61,7 +65,7 @@ void correctPasswordChangeState(bool change){
 		else
 		{
 			//erase inputPasswordbuffer
-			DisplayWrongPassword();
+			WrongPasswordPage();
 		}
 	}//else invalid sound
 }
@@ -149,6 +153,7 @@ void processEditPasswordState(char input){
 		case 'B':
 			lockState.indexState=OPEN;
 			resetInputAndDisplay();
+			musicPlay();
 			OpenPage();
 			break;
 		default:
@@ -217,14 +222,11 @@ void processInput(uint32_t currentState,char input, uint32_t passwordSize){
 	{
 		case 0	://CLOSED
 			processClosedState(input);
-			//ClosePage();
 			break;
 		case 1	://OPEN
 			processOpenState(input);
 			break;
 		case 2	://ENTER PASSWORD
-			//TODO /implement method for when to many attempts
-			//			are performed
 			processEnterPasswordState(input);
 			break;
 		case 3	://EDIT PASSWORD
