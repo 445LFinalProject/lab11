@@ -4097,8 +4097,8 @@ void NotMatchPage(){
 }
 
 void InitializeLCD(){
-		ST7735_InitR(ST7735_BLACK);
-	
+	Output_Init();
+	ST7735_FillScreen(0);
 	SysTick_Init();
 	ClosePage();
 	/*

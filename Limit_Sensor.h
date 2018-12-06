@@ -1,4 +1,7 @@
 #include <stdint.h>
+#define CLOSED 0
+#define OPEN 1
+#define LIMBO 2
 
-void Limit_Sensor_Initialization(void(*touchtask)(void), void(*releasetask)(void));
-int8_t get_Door_Status(void);
+void Limit_Sensor_Init(void);
+uint8_t getDoorStatus(void);

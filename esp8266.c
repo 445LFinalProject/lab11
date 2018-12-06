@@ -28,10 +28,10 @@
 #include "ST7735.h"
 #include "esp8266.h"
 // the following two lines connect you to the internet
-char    ssid[32]        = "Robin's iPhone";
-char    pass[32]        = "1234567890";
+char    ssid[32]        = "ank_k";
+char    pass[32]        = "familynames123";
 // create your own Blynk server app and edit this next line with your authentication code
-char    auth[64]        = "9cbe612c858d4357b26c091272f00f0e";
+char    auth[64]        = "2abc3e3fce004e82a08eab6a7494574f";
 
 #define UART_FR_RXFF            0x00000040  // UART Receive FIFO Full
 #define UART_FR_TXFF            0x00000020  // UART Transmit FIFO Full

@@ -25,11 +25,11 @@ void DisableInterrupts(void);   // Defined in startup.s
 void WaitForInterrupt(void);    // Defined in startup.s
 
 
-
 char Buffer[4];
 char Password[4]="1234";
 uint32_t KeyCount;
 
+<<<<<<< HEAD
 // These 6 variables contain the most recent Blynk to TM4C123 message
 // Blynk to TM4C123 uses VP0 to VP15
 char serial_buf[64];
@@ -151,10 +151,14 @@ void SendInformation(void){
 
 
 LockState lockState = {false,false,0,"1245","    ",0,{0,1,2,3},0,false};
+=======
+LockState lockState = {false,false,0,"1234","    ",0,{0,1,2,3},0,false};
+>>>>>>> 7a503db613f7c0eab44d4424aaf58ec4088c42b3
 int main(void){
   PLL_Init(Bus80MHz);   // Bus clock at 80 MHz
   DisableInterrupts();  // Disable interrupts until finished with inits
   
+<<<<<<< HEAD
 //	PortF_Init();
 	/*
   LastF = PortF_Input();
@@ -181,6 +185,12 @@ int main(void){
 	InitializeLCD();
 	//blynks every two seconds
 	//playerInit(TEST1);
+=======
+	uint32_t i=0;
+	Matrix_Init();				//Testing matrix
+	Output_Init();
+	Stepper_Init();
+>>>>>>> 7a503db613f7c0eab44d4424aaf58ec4088c42b3
 	EnableInterrupts();
 
   while(1) {
@@ -189,11 +199,5 @@ int main(void){
 		//Display(State)
     i = (i+1)&0x03;
    // WaitForInterrupt(); // low power mode
-  }
-
-	//stepper motor code calls*/
-	Stepper_Init();
-  while(1){
-    //door_Open(10*speed);   // output every 10ms
   }
 }

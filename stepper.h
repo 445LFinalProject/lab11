@@ -29,7 +29,7 @@
 // PD1 connected to driver for stepper motor coil B
 // PD0 connected to driver for stepper motor coil B'
 
-
+#define speed 80000
 // Initialize Stepper interface
 void Stepper_Init(void);
 

@@ -1,26 +1,3 @@
-// -------------------------------------------------------------------
-// File name: Blynk.c
-// Description: This code is used to bridge the TM4C123 board and the Blynk Application
-//              via the ESP8266 WiFi board
-// Author: Mark McDermott and Andrew Lynch (Arduino source)
-// Converted to EE445L style Jonathan Valvano
-// Orig gen date: May 21, 2018
-// Last update: Sept 20, 2018
-//
-// Download latest Blynk library here:
-//   https://github.com/blynkkk/blynk-library/releases/latest
-//
-//  Blynk is a platform with iOS and Android apps to control
-//  Arduino, Raspberry Pi and the likes over the Internet.
-//  You can easily build graphic interfaces for all your
-//  projects by simply dragging and dropping widgets.
-//
-//   Downloads, docs, tutorials: http://www.blynk.cc
-//   Sketch generator:           http://examples.blynk.cc
-//   Blynk community:            http://community.blynk.cc
-//
-//------------------------------------------------------------------------------
-
 // TM4C123       ESP8266-ESP01 (2 by 4 header)
 // PE5 (U5TX) to Pin 1 (Rx)
 // PE4 (U5RX) to Pin 5 (TX)
@@ -37,55 +14,92 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h>
+#include "stdbool.h"
 #include "tm4c123gh6pm.h"
 #include "ST7735.h"
-#include "PLL.h"
 #include "Timers.h"
 #include "UART.h"
-#include "Ports.h"
 #include "esp8266.h"
 #include "Blynk.h"
+#include "stateprocessor.h"
+#include "Limit_Sensor.h"
+#include "stepper.h"
 
 void EnableInterrupts(void);    // Defined in startup.s
 void DisableInterrupts(void);   // Defined in startup.s
 void WaitForInterrupt(void);    // Defined in startup.s
 
-/*
+#define FALSE 0
+#define TRUE 1
 // These 6 variables contain the most recent Blynk to TM4C123 message
 // Blynk to TM4C123 uses VP0 to VP15
+/*
+VP Lists
+VP0 --> initializes password change
+VP2 --> saves password numerical input
+VP1 --> password numerical input
+VP3 --> toggle lock on keypad input
+VP4 --> turn off alarm
+
+VP70 --> displays status of door
+*/
 char serial_buf[64];
 char Pin_Number[2]   = "99";       // Initialize to invalid pin number
 char Pin_Integer[8]  = "0000";     //
 char Pin_Float[8]    = "0.0000";   //
 uint32_t pin_num; 
 uint32_t pin_int;
+volatile uint32_t password_entry;
+volatile bool keypad_access = TRUE;
+volatile bool password_reset_mode = FALSE;
+static uint32_t password_entry_counter = 0;
+char *a;
+char open [5] = {'o','p','e','n','\0'};
+char closed [7] = {'c','l','o','s','e','d','\0'};
+char moving[7]={'m','o','v','i','n','g','\0'};
  
- // Initialize PortF switches and LEDs
-void PortF_Init(void){ volatile uint32_t delay;
-  SYSCTL_RCGCGPIO_R |= 0x00000020;  // 1) activate clock for Port F
-  delay = SYSCTL_RCGCGPIO_R;        // allow time for clock to start
-  GPIO_PORTF_LOCK_R = 0x4C4F434B;   // 2) unlock GPIO Port F
-  GPIO_PORTF_CR_R = 0x1F;           // allow changes to PF4-0
-  // only PF0 needs to be unlocked, other bits can't be locked
-  GPIO_PORTF_AMSEL_R = 0x00;        // 3) disable analog on PF
-  GPIO_PORTF_PCTL_R = 0x00000000;   // 4) PCTL GPIO on PF4-0
-  GPIO_PORTF_DIR_R = 0x0E;          // 5) PF4,PF0 in, PF3-1 out
-  GPIO_PORTF_AFSEL_R = 0x00;        // 6) disable alt funct on PF7-0
-  GPIO_PORTF_PUR_R = 0x11;          // enable pull-up on PF0 and PF4
-  GPIO_PORTF_DEN_R = 0x1F;          // 7) enable digital I/O on PF4-0
-}
-// read switches,
-// Bit4 and Bit0 are in negative logic
-// returns 0x00,0x01,0x10, or 0x11
-uint32_t PortF_Input(void){
-  return (GPIO_PORTF_DATA_R&0x11);  // read PF4,PF0 inputs
-}
-// Output to LEDs
-// LEDs on bits 1,2,3
-void PortF_Output(uint32_t data){ // write PF3-PF1 outputs
-  GPIO_PORTF_DATA_R = data;
+char *itoa (int32_t value, char *result, int base){
+    // check that the base if valid
+    if (base < 2 || base > 36) { *result = '\0'; return result; }
+
+    char* ptr = result, *ptr1 = result, tmp_char;
+    int tmp_value;
+
+    do {
+        tmp_value = value;
+        value /= base;
+        *ptr++ = "zyxwvutsrqponmlkjihgfedcba9876543210123456789abcdefghijklmnopqrstuvwxyz" [35 + (tmp_value - value * base)];
+    } while ( value );
+
+    // Apply negative sign
+    if (tmp_value < 0) *ptr++ = '-';
+    *ptr-- = '\0';
+    while (ptr1 < ptr) {
+        tmp_char = *ptr;
+        *ptr--= *ptr1;
+        *ptr1++ = tmp_char;
+    }
+    return result;
 }
 
+void Blynk_Init(void){	
+#ifdef DEBUG3
+  ST7735_OutString("EE445L Lab 4D\nBlynk example\n");
+#endif
+#ifdef DEBUG1
+  UART_Init(5);         // Enable Debug Serial Port
+  UART_OutString("\n\rEE445L Lab 4D\n\rBlynk example");
+#endif
+  ESP8266_Init();       // Enable ESP8266 Serial Port
+  ESP8266_Reset();      // Reset the WiFi module
+  ESP8266_SetupWiFi();  // Setup communications to Blynk Server  
+  
+  Timer2A_Init(&Blynk_to_TM4C,800000,4); 
+  // check for receive data from Blynk App every 10ms
+
+  Timer3A_Init(&SendInformation,40000000,4); 
+  // Send data back to Blynk App every 1/2 second
+}
 
 // ----------------------------------- TM4C_to_Blynk ------------------------------
 // Send data to the Blynk App
@@ -102,7 +116,18 @@ void TM4C_to_Blynk(uint32_t pin,uint32_t value){
   ESP8266_OutChar(',');
   ESP8266_OutString("0.0\n");  // Null value not used in this example
 }
- 
+
+void TM4CtoBlynk(uint32_t pin,char *value){
+  if((pin < 70)||(pin > 99)){
+    return; // ignore illegal requests
+  }
+// your account will be temporarily halted if you send too much data
+  ESP8266_OutUDec(pin);       // Send the Virtual Pin #
+  ESP8266_OutChar(',');
+  ESP8266_OutString(value);      // Send the current value
+  ESP8266_OutChar(',');
+  ESP8266_OutString("0.0\n");  // Null value not used in this example
+}
  
 // -------------------------   Blynk_to_TM4C  -----------------------------------
 // This routine receives the Blynk Virtual Pin data via the ESP8266 and parses the
@@ -128,18 +153,63 @@ void Blynk_to_TM4C(void){int j; char data;
     strcpy(Pin_Float, strtok(NULL, ","));         // Not used
     pin_num = atoi(Pin_Number);     // Need to convert ASCII to integer
     pin_int = atoi(Pin_Integer);  
-  // ---------------------------- VP #1 ----------------------------------------
-  // This VP is the LED select button
-    if(pin_num == 0x01)  {  
-      LED = pin_int;
-      PortF_Output(LED<<2); // Blue LED
-#ifdef DEBUG3
-      Output_Color(ST7735_CYAN);
-      ST7735_OutString("Rcv VP1 data=");
-      ST7735_OutUDec(LED);
-      ST7735_OutChar('\n');
-#endif
-    }                               // Parse incoming data        
+  
+  // indicates user wants to reset password or save entered password
+    if(pin_num == 0x00)  {
+			if(password_reset_mode == FALSE) {
+				keypad_access = FALSE;
+				password_reset_mode = TRUE;
+				processOpenState('A');
+			}
+    }   
+		
+		// new reset password entry
+		else if(pin_num == 0x01){
+			if(password_reset_mode)	password_entry = pin_int;
+		}
+		
+		// saves reset password entry
+		else if(pin_num == 0x02){
+				if(password_reset_mode){
+				itoa(password_entry,a,10);
+				processEditPasswordState(*a);
+				if(password_entry_counter&0x3) processEditPasswordState('#');
+				if(password_entry_counter&0x7) {
+					keypad_access = TRUE;
+					password_reset_mode = FALSE;
+				}
+				password_entry_counter++;
+			}
+		}
+		
+		//deletes reset password entry
+		else if(pin_num == 0x03){
+			if(password_reset_mode) processEditPasswordState('D');
+		}
+		
+		//disables user access to keypad
+		else if(pin_num == 0x04){
+			if(pin_int) keypad_access = TRUE;
+			else keypad_access = FALSE;
+		}
+		
+		//snooze speaker
+		else if(pin_num == 0x05){
+			//disableSpeaker();
+		}
+		
+		//manual close/open door
+		else if(pin_num == 0x06){
+			if(getDoorStatus() == CLOSED){
+				while(getDoorStatus() != OPEN) door_Open(10*speed);
+				updateToOpenState();
+			}
+			else if(getDoorStatus() == OPEN){
+				while(getDoorStatus() != CLOSED) door_Close(10*speed);
+				updateToClosedState();
+			}
+		}
+				
 #ifdef DEBUG1
     UART_OutString(" Pin_Number = ");
     UART_OutString(Pin_Number);
@@ -153,50 +223,25 @@ void Blynk_to_TM4C(void){int j; char data;
 }
 
 void SendInformation(void){
-  uint32_t thisF;
-  thisF = PortF_Input();
 // your account will be temporarily halted if you send too much data
-  if(thisF != LastF){
-    TM4C_to_Blynk(74, thisF);  // VP74
-#ifdef DEBUG3
-    Output_Color(ST7735_WHITE);
-    ST7735_OutString("Send 74 data=");
-    ST7735_OutUDec(thisF);
-    ST7735_OutChar('\n');
-#endif
-  }
-  LastF = thisF;
-}
-
-  
-int main1(void){       
-  PLL_Init(Bus80MHz);   // Bus clock at 80 MHz
-  DisableInterrupts();  // Disable interrupts until finished with inits
-  PortF_Init();
-  LastF = PortF_Input();
+	uint8_t door_status = getDoorStatus();
+	if(door_status==0) TM4CtoBlynk(70, &closed[0]);
+	/*if(door_status==0) TM4CtoBlynk(70, &closed[0]);
+	else if(door_status==1) TM4CtoBlynk(70, &open[0]);
+	else if(door_status==2) TM4CtoBlynk(70, &moving[0]);*/
+	//TM4C_to_Blynk(70, door_status);
 	
 #ifdef DEBUG3
-  Output_Init();        // initialize ST7735
-  ST7735_OutString("EE445L Lab 4D\nBlynk example\n");
+    Output_Color(ST7735_WHITE);
+    //ST7735_OutString("Send 74 data=");
+    //ST7735_OutChar('\n');
 #endif
-#ifdef DEBUG1
-  UART_Init(5);         // Enable Debug Serial Port
-  UART_OutString("\n\rEE445L Lab 4D\n\rBlynk example");
-#endif
-  ESP8266_Init();       // Enable ESP8266 Serial Port
-  ESP8266_Reset();      // Reset the WiFi module
-  ESP8266_SetupWiFi();  // Setup communications to Blynk Server  
-  
-  Timer2A_Init(&Blynk_to_TM4C,800000,4); 
-  // check for receive data from Blynk App every 10ms
-
-  Timer3A_Init(&SendInformation,40000000,4); 
-  // Send data back to Blynk App every 1/2 second
-  EnableInterrupts();
-
-  while(1) {   
-    WaitForInterrupt(); // low power mode
-  }
 }
-*/
 
+bool getKeypadAccessStatus(void){
+	return keypad_access;
+}
+
+uint32_t getBlynkPasswordEntry(void){
+	return password_entry;
+}
