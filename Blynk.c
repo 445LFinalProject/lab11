@@ -54,6 +54,9 @@ volatile bool keypad_access = TRUE;
 volatile bool password_reset_mode = FALSE;
 static uint32_t password_entry_counter = 0;
 char *a;
+char open [5] = {'o','p','e','n','\0'};
+char closed [7] = {'c','l','o','s','e','d','\0'};
+char moving[7]={'m','o','v','i','n','g','\0'};
  
 char *itoa (int32_t value, char *result, int base){
     // check that the base if valid
@@ -91,10 +94,10 @@ void Blynk_Init(void){
   ESP8266_Reset();      // Reset the WiFi module
   ESP8266_SetupWiFi();  // Setup communications to Blynk Server  
   
-  //Timer2A_Init(&Blynk_to_TM4C,800000,4); 
+  Timer2A_Init(&Blynk_to_TM4C,800000,4); 
   // check for receive data from Blynk App every 10ms
 
-  //Timer3A_Init(&SendInformation,40000000,4); 
+  Timer3A_Init(&SendInformation,40000000,4); 
   // Send data back to Blynk App every 1/2 second
 }
 
@@ -113,7 +116,18 @@ void TM4C_to_Blynk(uint32_t pin,uint32_t value){
   ESP8266_OutChar(',');
   ESP8266_OutString("0.0\n");  // Null value not used in this example
 }
- 
+
+void TM4CtoBlynk(uint32_t pin,char *value){
+  if((pin < 70)||(pin > 99)){
+    return; // ignore illegal requests
+  }
+// your account will be temporarily halted if you send too much data
+  ESP8266_OutUDec(pin);       // Send the Virtual Pin #
+  ESP8266_OutChar(',');
+  ESP8266_OutString(value);      // Send the current value
+  ESP8266_OutChar(',');
+  ESP8266_OutString("0.0\n");  // Null value not used in this example
+}
  
 // -------------------------   Blynk_to_TM4C  -----------------------------------
 // This routine receives the Blynk Virtual Pin data via the ESP8266 and parses the
@@ -145,7 +159,7 @@ void Blynk_to_TM4C(void){int j; char data;
 			if(password_reset_mode == FALSE) {
 				keypad_access = FALSE;
 				password_reset_mode = TRUE;
-				stateChangeToRstPassword();
+				processOpenState('A');
 			}
     }   
 		
@@ -159,12 +173,12 @@ void Blynk_to_TM4C(void){int j; char data;
 				if(password_reset_mode){
 				itoa(password_entry,a,10);
 				processEditPasswordState(*a);
-				password_entry_counter++;
-				if(password_entry_counter&0x03) processEditPasswordState('#');
-				if(password_entry_counter&0x07) {
+				if(password_entry_counter&0x3) processEditPasswordState('#');
+				if(password_entry_counter&0x7) {
 					keypad_access = TRUE;
 					password_reset_mode = FALSE;
 				}
+				password_entry_counter++;
 			}
 		}
 		
@@ -211,10 +225,11 @@ void Blynk_to_TM4C(void){int j; char data;
 void SendInformation(void){
 // your account will be temporarily halted if you send too much data
 	uint8_t door_status = getDoorStatus();
-	/*if(door_status==0) TM4C_to_Blynk(70, "closed");
-	else if(door_status==1) TM4C_to_Blynk(70, "open");
-	else if(door_status==2) TM4C_to_Blynk(70, "moving");*/
-	TM4C_to_Blynk(70, door_status);
+	if(door_status==0) TM4CtoBlynk(70, &closed[0]);
+	/*if(door_status==0) TM4CtoBlynk(70, &closed[0]);
+	else if(door_status==1) TM4CtoBlynk(70, &open[0]);
+	else if(door_status==2) TM4CtoBlynk(70, &moving[0]);*/
+	//TM4C_to_Blynk(70, door_status);
 	
 #ifdef DEBUG3
     Output_Color(ST7735_WHITE);

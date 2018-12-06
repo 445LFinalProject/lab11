@@ -32,7 +32,7 @@ int main(void){
   
 	uint32_t i=0;
 	Matrix_Init();				//Testing matrix
-	InitializeLCD();
+	Output_Init();
 	Stepper_Init();
 	EnableInterrupts();
 
