@@ -1,9 +1,13 @@
 #include <stdint.h>
+#include "stdbool.h"
 volatile static uint32_t LED;      // VP1
 volatile static uint32_t LastF;    // VP74
 void TM4C_to_Blynk(uint32_t pin,uint32_t value);
 void Blynk_to_TM4C(void);
 void SendInformation(void);
+void Blynk_Init(void);
+bool getKeypadAccessStatus(void);
+uint32_t getBlynkPasswordEntry(void);
 
 #ifndef _PORTFH_
 #define _PORTFH_
@@ -18,6 +22,7 @@ void SendInformation(void);
 #define RED       0x02
 #define BLUE      0x04
 #define GREEN     0x08
+	
 // Initialize PortF switches and LEDs
 void PortF_Init(void);
 // read switches,

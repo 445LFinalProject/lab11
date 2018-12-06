@@ -1,13 +1,26 @@
-
 #include "stateprocessor.h"
 #include "LCDDriver.h"
-#define speed 1600
-#define CLOSED 0;
-#define OPEN 1;
+#include "Blynk.h"
+#include "Limit_Sensor.h" 
+#include "stepper.h"
+
+#define FALSE 0
+#define TRUE 1
 #define ENTERPASSWORD 2;
 #define EDITPASSWORD	3;
 
 extern LockState lockState;
+
+void toggleDoor(void){
+	if(getDoorStatus() == CLOSED){
+		while(getDoorStatus() != OPEN) door_Open(10*speed);
+		updateToOpenState();
+	}
+	else if(getDoorStatus() == OPEN){
+		while(getDoorStatus() != CLOSED) door_Close(10*speed);
+		updateToClosedState();
+	}
+}
 
 void eraseEntireInputBuffer()
 {
@@ -19,8 +32,7 @@ void eraseEntireInputBuffer()
 }
 
 //resets index and erases astriks
-void resetInputAndDisplay()
-{
+void resetInputAndDisplay(){
 	lockState.inputPasswordbuffer[0]=' ';
 	lockState.indexInputPasswordBuffer=0;
 	RemoveAstrick(3);
@@ -29,8 +41,7 @@ void resetInputAndDisplay()
 	RemoveAstrick(0);
 }
 
-void addValueToInputBuffer(char input)
-{
+void addValueToInputBuffer(char input){
 	if (lockState.indexInputPasswordBuffer<4)
 	{
 		lockState.inputPasswordbuffer[lockState.indexInputPasswordBuffer]=input;
@@ -41,8 +52,8 @@ void addValueToInputBuffer(char input)
 void correctPasswordChangeState(bool change){
 	if(change)
 	{
+		while(getDoorStatus() != OPEN) door_Open(10*speed);
 		lockState.indexState=OPEN;
-		//Flag for motor to move 
 		lockState.inputPasswordbuffer[0]=' ';
 		lockState.indexInputPasswordBuffer=0;
 		//	Closed to Open erase buffer input once open 
@@ -53,8 +64,7 @@ void correctPasswordChangeState(bool change){
 		resetInputAndDisplay();
 		if(lockState.passwordAttempts==3)
 		{
-			//lock and goes back to state
-			lockState.indexState=CLOSED;
+			updateToClosedState();
 			lockState.lockInputs=true;
 			CloseDisabledPage();
 		}
@@ -102,8 +112,7 @@ void removeBufferInput(){
 //reenter password state determines 2 things 
 // one is if the right password has been re entered
 // second whether or not to move states
-void reEnterNewPasswordState()
-{
+void reEnterNewPasswordState(){
 	static char storeTempNewPassword[4];
 	int i;
 	if (lockState.indexInputPasswordBuffer==4)
@@ -131,7 +140,7 @@ void reEnterNewPasswordState()
 				}
 			for (i=0; i<4; i++)
 				lockState.passwordBuffer[i] = lockState.inputPasswordbuffer[i];
-			lockState.indexState=OPEN;
+			setState();
 			resetInputAndDisplay();
 			OpenPage();
 		}
@@ -147,7 +156,7 @@ void processEditPasswordState(char input){
 			reEnterNewPasswordState();
 			break;
 		case 'B':
-			lockState.indexState=OPEN;
+			toggleDoor();
 			resetInputAndDisplay();
 			OpenPage();
 			break;
@@ -186,7 +195,7 @@ void processEnterPasswordState(char input){
 			removeBufferInput();
 			break;
 		case 'B':
-			lockState.indexState=CLOSED;
+			lockState.indexState=CLOSED;	//might need to be fixed
 			resetInputAndDisplay();
 			ClosePage();
 			break;
@@ -212,23 +221,40 @@ void processClosedState(char  input){
 }
 //TODO: TIMER for Display wifi
 void processInput(uint32_t currentState,char input, uint32_t passwordSize){
-	uint32_t idk;
-	switch(currentState)
-	{
-		case 0	://CLOSED
-			processClosedState(input);
-			//ClosePage();
-			break;
-		case 1	://OPEN
-			processOpenState(input);
-			break;
-		case 2	://ENTER PASSWORD
-			//TODO /implement method for when to many attempts
-			//			are performed
-			processEnterPasswordState(input);
-			break;
-		case 3	://EDIT PASSWORD
-			processEditPasswordState(input);
-			break;
+	if(getKeypadAccessStatus() == TRUE && getDoorStatus() != LIMBO){
+		switch(currentState)
+		{
+			//set state with getDoorStatus() at some point
+			case 0	://CLOSED
+				processClosedState(input);
+				break;
+			case 1	://OPEN
+				processOpenState(input);
+				break;
+			case 2	://ENTER PASSWORD
+				processEnterPasswordState(input);
+				break;
+			case 3	://EDIT PASSWORD
+				processEditPasswordState(input);
+				break;
+		}
 	}
+}
+
+// used for Blynk functionality
+void stateChangeToRstPassword(void){
+	lockState.indexState = 3;
+}
+
+void setState(void){
+	if(getDoorStatus() == OPEN) lockState.indexState = OPEN;
+	else if(getDoorStatus() == CLOSED) lockState.indexState = CLOSED;
+}
+
+void updateToOpenState(void){
+	lockState.indexState = OPEN;
+}
+
+void updateToClosedState(void){
+	lockState.indexState = CLOSED;
 }

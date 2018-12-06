@@ -17,11 +17,11 @@ struct LockState{
 typedef struct LockState LockState;
 
 void correctPasswordChangeState(bool change);
-bool validComparison();
-void reEnterNewPasswordState();
-bool deletePassword();
+bool validComparison(void);
+void reEnterNewPasswordState(void);
+bool deletePassword(void);
 bool comparePasswords(bool compare);
-void removeBufferInput();
+void removeBufferInput(void);
 void processEditPasswordState(char input);
 void processOpenState(char input);
 void processEnterPasswordState(char input);
@@ -30,3 +30,8 @@ void processInput(uint32_t currentState,char input, uint32_t passwordSize);
 void addValueToInputBuffer(char input);
 typedef struct LockState LockState;
 #endif
+
+void stateChangeToRstPassword(void);
+void setState(void);
+void updateToOpenState(void);
+void updateToClosedState(void);
