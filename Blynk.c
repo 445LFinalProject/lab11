@@ -144,13 +144,8 @@ void Blynk_to_TM4C(void){int j; char data;
     if(pin_num == 0x00)  {
 			if(password_reset_mode == FALSE) {
 				keypad_access = FALSE;
-				//correctPasswordChangeState(TRUE);
 				password_reset_mode = TRUE;
-			}
-			else {
-				keypad_access = TRUE;
-				password_reset_mode = FALSE;
-				//function to set password in buffer as new password?
+				stateChangeToRstPassword();
 			}
     }   
 		
@@ -166,12 +161,16 @@ void Blynk_to_TM4C(void){int j; char data;
 				processEditPasswordState(*a);
 				password_entry_counter++;
 				if(password_entry_counter&0x03) processEditPasswordState('#');
+				if(password_entry_counter&0x07) {
+					keypad_access = TRUE;
+					password_reset_mode = FALSE;
+				}
 			}
 		}
 		
 		//deletes reset password entry
 		else if(pin_num == 0x03){
-			processEditPasswordState('D');
+			if(password_reset_mode) processEditPasswordState('D');
 		}
 		
 		//disables user access to keypad

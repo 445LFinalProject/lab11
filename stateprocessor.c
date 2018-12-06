@@ -22,8 +22,7 @@ void toggleDoor(void){
 	}
 }
 
-void eraseEntireInputBuffer()
-{
+void eraseEntireInputBuffer(){
 	for (int i=0; i<4; i++)
 	{
 		lockState.inputPasswordbuffer[i]=' ';
