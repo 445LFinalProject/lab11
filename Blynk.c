@@ -24,7 +24,10 @@
 #include "stateprocessor.h"
 #include "Limit_Sensor.h"
 #include "stepper.h"
+#include "LCDDriver.h"
 
+
+extern LockState lockState;
 void EnableInterrupts(void);    // Defined in startup.s
 void DisableInterrupts(void);   // Defined in startup.s
 void WaitForInterrupt(void);    // Defined in startup.s
@@ -49,11 +52,12 @@ char Pin_Integer[8]  = "0000";     //
 char Pin_Float[8]    = "0.0000";   //
 uint32_t pin_num; 
 uint32_t pin_int;
+
 volatile uint32_t password_entry;
 volatile bool keypad_access = TRUE;
 volatile bool password_reset_mode = FALSE;
-static uint32_t password_entry_counter = 0;
-char *a;
+volatile bool keypad_flag = FALSE;					// tells us status of keypad when resetting password
+
 char open [5] = {'o','p','e','n','\0'};
 char closed [7] = {'c','l','o','s','e','d','\0'};
 char moving[7]={'m','o','v','i','n','g','\0'};
@@ -97,7 +101,7 @@ void Blynk_Init(void){
   Timer2A_Init(&Blynk_to_TM4C,800000,4); 
   // check for receive data from Blynk App every 10ms
 
-  Timer3A_Init(&SendInformation,40000000,4); 
+  Timer3A_Init(&SendInformation,40000000,4);
   // Send data back to Blynk App every 1/2 second
 }
 
@@ -156,50 +160,41 @@ void Blynk_to_TM4C(void){int j; char data;
   
   // indicates user wants to reset password or save entered password
     if(pin_num == 0x00)  {
-			if(password_reset_mode == FALSE) {
-				keypad_access = FALSE;
+			if(pin_int==1) {
+				if(keypad_flag==FALSE) keypad_access = FALSE;
 				password_reset_mode = TRUE;
 				processOpenState('A');
 			}
-    }   
-		
-		// new reset password entry
-		else if(pin_num == 0x01){
-			if(password_reset_mode)	password_entry = pin_int;
-		}
-		
-		// saves reset password entry
-		else if(pin_num == 0x02){
-				if(password_reset_mode){
-				itoa(password_entry,a,10);
-				processEditPasswordState(*a);
-				if(password_entry_counter&0x3) processEditPasswordState('#');
-				if(password_entry_counter&0x7) {
-					keypad_access = TRUE;
-					password_reset_mode = FALSE;
-				}
-				password_entry_counter++;
+			else {
+				if(keypad_flag==FALSE) keypad_access = TRUE;
+				setState();
 			}
-		}
-		
-		//deletes reset password entry
-		else if(pin_num == 0x03){
-			if(password_reset_mode) processEditPasswordState('D');
-		}
+    }   
 		
 		//disables user access to keypad
 		else if(pin_num == 0x04){
-			if(pin_int) keypad_access = TRUE;
-			else keypad_access = FALSE;
+			if(pin_int) {
+				keypad_access = FALSE;
+				keypad_flag = TRUE;
+			}
+			else {
+				keypad_access = TRUE;
+				keypad_flag = FALSE;
+			}
 		}
-		
+		else if (pin_num == 0x06)
+		{
+			//password_reset_mode = changePasswordBlynk(pin_int,password_reset_mode);
+			if(!password_reset_mode) DisplayPasswordChangeSuccessful();
+		}
 		//snooze speaker
 		else if(pin_num == 0x05){
-			//disableSpeaker();
+			//if(pin_int>=1) enableSpeaker();
+			//else disableSpeaker();
 		}
 		
 		//manual close/open door
-		else if(pin_num == 0x06){
+		else if(pin_num == 0x02){
 			if(getDoorStatus() == CLOSED){
 				while(getDoorStatus() != OPEN) door_Open(10*speed);
 				updateToOpenState();
@@ -225,7 +220,7 @@ void Blynk_to_TM4C(void){int j; char data;
 void SendInformation(void){
 // your account will be temporarily halted if you send too much data
 	uint8_t door_status = getDoorStatus();
-	if(door_status==0) TM4CtoBlynk(70, &closed[0]);
+	TM4CtoBlynk(70, &closed[0]);
 	/*if(door_status==0) TM4CtoBlynk(70, &closed[0]);
 	else if(door_status==1) TM4CtoBlynk(70, &open[0]);
 	else if(door_status==2) TM4CtoBlynk(70, &moving[0]);*/

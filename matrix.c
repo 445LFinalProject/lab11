@@ -70,11 +70,12 @@ void MatrixKeypad_Init(void){
   SYSCTL_RCGCGPIO_R |= 0x0002;        // enable Port B
   HeartBeat = 0;
   GPIO_PORTB_DEN_R |= 0xFF;        	// enable digital I/O on PA5-2
-  GPIO_PORTB_DIR_R &= 0x0F;       	// make PB7-4 input 
-  GPIO_PORTB_DIR_R |= 0x0F;					//making PB0-3 output
-	//GPIO_PORTB_PUR_R |= 
-	GPIO_PORTB_PUR_R |= 0xF0;
-	GPIO_PORTB_PCTL_R = (GPIO_PORTB_PCTL_R&0xFF0000FF)+0x00000000;
+  GPIO_PORTB_DIR_R &= 0x00;       	// make PB7-4 input 
+  //GPIO_PORTB_DIR_R |= 0x0F;					//making PB0-3 output
+	//GPIO_PORTB_PUR_R |= 0xF0;
+	GPIO_PORTB_PDR_R &= 0x00;
+	GPIO_PORTB_PUR_R &= 0xF0;
+	GPIO_PORTB_PCTL_R = (GPIO_PORTB_PCTL_R&0x00000000)+0x00000000;
   GPIO_PORTB_AFSEL_R = 0;     // disable alternate functionality on PB
   GPIO_PORTB_AMSEL_R = 0;     // disable analog functionality on PB
 }
@@ -104,9 +105,11 @@ char MatrixKeypad_Scan(int32_t *Num){
   pt = &ScanTab[0];
   while(pt->direction){
     GPIO_PORTB_DIR_R = pt->direction;      // one output
-    GPIO_PORTB_DATA_R &= ~0x0F;            // DIRn=0, OUTn=HiZ; DIRn=1, OUTn=0
+		GPIO_PORTB_DATA_R |= 0xF0;
+		GPIO_PORTB_DATA_R &= ~(pt->direction);
     for(j=1; j<=10; j++);                  // very short delay
-    column = ((GPIO_PORTB_DATA_R&0xF0)>>4);// read columns
+    column = ((GPIO_PORTB_DATA_R&0xF0)>>4);// read columnsF		
+		column &= 0xFF;
     for(j=0; j<=3; j++){
       if((column&0x01)==0){
         key = pt->keycode[j];
@@ -139,7 +142,7 @@ void Matrix_Init(void){
   LastKey = 0;             // no key typed
   MatrixFifo_Init();
   MatrixKeypad_Init();     // Program 4.13
-  Timer3A_Init(&Matrix_Handler,100*80000,4);  // Program 5.12, 50 ms polling
+  Timer5A_Init(&Matrix_Handler,100*80000,2);  // Program 5.12, 50 ms polling 80000 1ms
 } 
 
 

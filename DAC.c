@@ -8,12 +8,12 @@
 // assumes: system clock rate less than 20 MHz
 void DAC_Init(uint16_t data){
   SYSCTL_RCGCSSI_R |= 0x02;       // activate SSI1
-  SYSCTL_RCGCGPIO_R |= 0x08;      // activate port D
-  while((SYSCTL_PRGPIO_R&0x08) == 0){};// ready?
-  GPIO_PORTD_AFSEL_R |= 0x0B;     // enable alt funct on PD0,1,3
-  GPIO_PORTD_DEN_R |= 0x0B;       // configure PD0,1,3 as SSI
-  GPIO_PORTD_PCTL_R = (GPIO_PORTD_PCTL_R&0xFFFF0F00)+0x00002022;
-  GPIO_PORTD_AMSEL_R = 0;         // disable analog functionality on PA
+  SYSCTL_RCGCGPIO_R |= 0x20;      // activate port F
+  while((SYSCTL_PRGPIO_R&0x20) == 0){};	// ready?
+  GPIO_PORTF_AFSEL_R |= 0x0E;     // enable alt funct on PD0,1,3
+  GPIO_PORTF_DEN_R |= 0x0E;       // configure PD0,1,3 as SSI
+  GPIO_PORTF_PCTL_R = (GPIO_PORTF_PCTL_R&0xFFFF000F)+0x00002220;
+  GPIO_PORTF_AMSEL_R = 0;         // disable analog functionality on PA
   SSI1_CR1_R = 0x00000000;        // disable SSI, master mode
   SSI1_CPSR_R = 0x02;             // 8 MHz SSIClk 
   SSI1_CR0_R &= ~(0x0000FFF0);    // SCR = 4, SPH = 0, SPO = 1 Freescale

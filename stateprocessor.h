@@ -28,10 +28,14 @@ void processEnterPasswordState(char input);
 void processClosedState(char  input);
 void processInput(uint32_t currentState,char input, uint32_t passwordSize);
 void addValueToInputBuffer(char input);
-typedef struct LockState LockState;
-#endif
 
+//Blynk
+void changePasswordBlynk(uint32_t num,bool password_reset_mode);
 void stateChangeToRstPassword(void);
 void setState(void);
 void updateToOpenState(void);
 void updateToClosedState(void);
+typedef struct LockState LockState;
+#endif
+
+

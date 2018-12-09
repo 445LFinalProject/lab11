@@ -111,7 +111,6 @@ void Timer1A_Disarm(void){
 void Timer1A_Ack(void){
 	TIMER1_ICR_R = TIMER_ICR_TATOCINT;
 }
-
 void Timer1A_Handler(void){
   TIMER1_ICR_R = TIMER_ICR_TATOCINT;// acknowledge TIMER2A timeout
   (*PeriodicTask1)();               // execute user task
@@ -129,17 +128,16 @@ void Timer2A_Init(void(*task)(void),uint32_t period, uint32_t priority){
 	DisableInterrupts();
   TIMER2_CTL_R = 0x00000000;   							// 1) disable TIMER2A during setup
   TIMER2_CFG_R = 0x00000000;    						// 2) configure for 32-bit mode
-  TIMER2_TAMR_R = TIMER_TAMR_TAMR_PERIOD;   // 3) configure for periodic mode, down-count 
-  TIMER2_TAILR_R = period;  								// 4) reload value resets every 64ms second
+  TIMER2_TAMR_R = 0x02;									   // 3) configure for periodic mode, down-count 
+  TIMER2_TAILR_R = period-1;  								// 4) reload value resets every 64ms second
   TIMER2_TAPR_R = 0;            						// 5) bus clock resolution
-	TIMER2_IMR_R = TIMER_IMR_TATOIM;
+	TIMER2_IMR_R = 0x01;
 	TIMER2_ICR_R = 0x00000001;
 	priority = (priority&0x07)<<29;					// 
-  NVIC_PRI5_R = (NVIC_PRI5_R&0x00FFFFFF); // 8) priority 4 // 15-13  0 1 2 3    4 5 6 7    8 9 10 11    12 13 14 15
-	NVIC_PRI5_R = (NVIC_PRI5_R|priority);
+  //NVIC_PRI5_R = (NVIC_PRI5_R&0x00FFFFFF); // 8) priority 4 // 15-13  0 1 2 3    4 5 6 7    8 9 10 11    12 13 14 15
+	NVIC_PRI5_R = (NVIC_PRI5_R&0x00FFFFFF)|0x80000000;
   NVIC_EN0_R = 1<<23;           						// 9) enable IRQ 21 in NVIC must do
-	TIMER2_CTL_R |= TIMER_CTL_TAEN;
-	EnableInterrupts();
+	TIMER2_CTL_R = 0x00000001;
 }
 
 void Timer2A_EnableClock(void){
@@ -179,17 +177,16 @@ void Timer3A_Init(void(*task)(void), uint32_t period, uint32_t priority){
 	DisableInterrupts();
   TIMER3_CTL_R = 0x00000000;   							// 1) disable TIMER2A during setup
   TIMER3_CFG_R = 0x00000000;    						// 2) configure for 32-bit mode
-  TIMER3_TAMR_R = TIMER_TAMR_TAMR_PERIOD;   // 3) configure for periodic mode, down-count 
+  TIMER3_TAMR_R = 0x00000002;   					  // 3) configure for periodic mode, down-count 
   TIMER3_TAILR_R = period;  								// 4) reload value resets every 64ms second
   TIMER3_TAPR_R = 0;            						// 5) bus clock resolution
-	TIMER3_IMR_R = TIMER_IMR_TATOIM;
+	TIMER3_IMR_R = 0x00000001;    
 	TIMER3_ICR_R = 0x00000001; 
 	priority = (priority&0x07)<<29;
   NVIC_PRI8_R = (NVIC_PRI8_R&0x00FFFFFF); // 8) priority 4 // 15-13  0 1 2 3    4 5 6 7    8 9 10 11    12 13 14 15
 	NVIC_PRI8_R = (NVIC_PRI8_R|priority);
   NVIC_EN1_R = 1 << 3; 
-	TIMER3_CTL_R |= TIMER_CTL_TAEN;
-	EnableInterrupts();
+	TIMER3_CTL_R |= 0x00000001;    
 }
 
 void Timer3A_EnableClock(void){

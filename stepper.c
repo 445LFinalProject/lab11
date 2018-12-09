@@ -78,7 +78,7 @@ void door_Close(uint32_t delay){
 void Stepper_Init(void){
   SYSCTL_RCGCGPIO_R |= 0x08; // 1) activate port D
 	while((SYSCTL_PRGPIO_R & 0x00000008) == 0){};
-  SysTick_Init();
+  //SysTick_Init();
   Pos = 0;                   
   Pt = &fsm[0]; 
                                     // 2) no need to unlock PD3-0
